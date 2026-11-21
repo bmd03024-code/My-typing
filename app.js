@@ -73,7 +73,7 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
  run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,manualPaused:false,done:false,lastInputAt:0,lastTickAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
  choosePrompt();
  $('lesson').classList.remove('hide');
- $('trackName').textContent=t==='en'?'ENGLISH QWERTY':'বাংলা Bijoy-style Unicode';
+ $('trackName').textContent=t==='en'?'ENGLISH QWERTY':'বাংলা UniBijoy Unicode';
  $('lessonTitle').textContent='Day '+d+' · '+day.title;
  $('phase').textContent=ph==='learn'?'Learn':'Game';
  $('typing').value='';$('typing')._resetBijoy?.();$('typing').disabled=false;
