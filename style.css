@@ -36,3 +36,10 @@
 .right-hand .finger.finger-active{transform:translateY(13px) rotate(0deg) scaleY(.94)}
 .finger-label{flex-basis:100%;text-align:center;color:var(--accent);font-size:13px;font-weight:700;margin-top:6px}
 @media(max-width:430px){.hands-stage{gap:10px}.palm{transform:scale(.85) rotate(-5deg);transform-origin:bottom center;margin:0 -8px}.right-hand .palm{transform:scaleX(-1) scale(.85) rotate(-5deg)}.hand-unit{min-width:108px}}
+
+/* Keep the hand illustration visible as a full-width block inside the learning keyboard */
+#keyboard{display:flex;flex-wrap:wrap;align-items:flex-start}
+#keyboard>.hands-stage{display:flex!important;flex:0 0 100%;width:100%;min-height:170px;box-sizing:border-box;overflow:visible}
+#keyboard>.keyboard-guide{flex:0 0 100%;width:100%}
+#keyboard>.key-row{flex:0 0 100%;width:100%}
+#keyboard .hand-unit{flex:0 0 auto}
