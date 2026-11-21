@@ -256,4 +256,32 @@ let left=300,started=Date.now();$('finalInfo').innerHTML='<h3>'+(lang==='en'?'En
 inp.addEventListener('input',update);speak(lang==='en'?'এবার ইংরেজি চূড়ান্ত পরীক্ষা। পাঁচ মিনিট সময় পাবেন। যতটা সম্ভব নির্ভুলভাবে টাইপ করুন।':'এবার বাংলা চূড়ান্ত পরীক্ষা। পাঁচ মিনিট সময় পাবেন। যতটা সম্ভব নির্ভুলভাবে টাইপ করুন।');function conclude(){clearInterval(examTimer);examTimer=null;inp.disabled=true;let r=update(),pass=lang==='en'?r.wpm>=30&&r.acc>=92:r.wpm>=20&&r.acc>=90;$('finalInfo').insertAdjacentHTML('beforeend','<h3>'+(pass?'লক্ষ্যমাত্রা অর্জিত':'লক্ষ্যমাত্রা অর্জিত হয়নি')+'</h3><p>ফলাফল: '+r.wpm+' '+(lang==='en'?'WPM':'CPM')+' · '+r.acc+'% accuracy</p>'+(pass?'<button id="certificate">Certificate / Print</button>':'<p>সার্টিফিকেট পেতে নির্ধারিত গতি ও নির্ভুলতা অর্জন করতে হবে। আবার পরীক্ষা দিন।</p>'));speak(pass?'অভিনন্দন! আপনি চূড়ান্ত পরীক্ষায় উত্তীর্ণ হয়েছেন। সার্টিফিকেট প্রিন্ট করতে বোতাম চাপুন।':'চেষ্টা চালিয়ে যান। এবার লক্ষ্য পূরণ হয়নি, তবে অনুশীলন করলে অবশ্যই উন্নতি হবে। আবার পরীক্ষা দিতে পারবেন।');if(pass)$('certificate').onclick=()=>{let w=window.open('','_blank');if(!w)return alert('Popup blocked. Allow popups to print.');const student=prompt('শিক্ষার্থীর নাম লিখুন','Student')||'Student';w.document.write('<!doctype html><html><meta charset="utf-8"><title>MS Office Management Course Certificate</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:60px;border:12px double #276b61;margin:25px}h1{font-size:38px;color:#276b61}.score{font-size:22px;margin:30px}</style><h1>Certificate of Achievement</h1><p>This certifies that</p><h2>'+esc(student)+'</h2><p>completed the MS Office Management Course '+(lang==='en'?'English':'Bangla')+' final typing test.</p><div class="score">'+r.wpm+' '+(lang==='en'?'WPM':'CPM')+' · '+r.acc+'% accuracy</div><p>Date: '+new Date().toLocaleDateString()+'</p><p>MS Office Management Course</p><script>window.print()<\/script></html>');w.document.close()};}
 $('examStop').onclick=conclude;examTimer=setInterval(()=>{left--;let el=$('examClock');if(el)el.textContent=fmt(left);if(left<=0)conclude()},1000);
 }
+
+const botFaq=[
+[['ctrl+c','copy','কপি'],'Copy: Ctrl + C। নির্বাচিত লেখা বা ফাইলের কপি ক্লিপবোর্ডে রাখে।'],
+[['ctrl+v','paste','পেস্ট'],'Paste: Ctrl + V। কপি বা কাট করা লেখা/ফাইল বসায়।'],
+[['ctrl+x','cut','কাট'],'Cut: Ctrl + X। নির্বাচিত লেখা বা ফাইল কাট করে ক্লিপবোর্ডে রাখে।'],
+[['ctrl+z','undo'],'Undo: Ctrl + Z। সর্বশেষ কাজ ফিরিয়ে নেয়।'],
+[['ctrl+y','redo'],'Redo: Ctrl + Y। Undo করা কাজ আবার ফিরিয়ে আনে।'],
+[['ctrl+s','save','সেভ'],'Save: Ctrl + S। বর্তমান ফাইল সংরক্ষণ করে।'],
+[['ctrl+a','select all'],'Select All: Ctrl + A। সক্রিয় ডকুমেন্টের সব কনটেন্ট নির্বাচন করে।'],
+[['ctrl+p','print','প্রিন্ট'],'Print: Ctrl + P। প্রিন্ট প্রিভিউ ও সেটিংস খোলে।'],
+[['ctrl+b','bold','বোল্ড'],'Bold: Ctrl + B। নির্বাচিত লেখাকে গাঢ় করে।'],
+[['ctrl+i','italic'],'Italic: Ctrl + I। নির্বাচিত লেখাকে বাঁকা করে।'],
+[['ctrl+u','underline'],'Underline: Ctrl + U। নির্বাচিত লেখার নিচে দাগ দেয়।'],
+[['ctrl+f','find','খুঁজে'],'Find: Ctrl + F। লেখা বা ডকুমেন্টে শব্দ খুঁজে বের করে।'],
+[['alt+f4'],'Alt + F4 সক্রিয় অ্যাপ বা উইন্ডো বন্ধ করে।'],
+[['wpm'],'WPM মানে Words Per Minute—প্রতি মিনিটে টাইপ করা শব্দের গতি।'],
+[['cpm'],'CPM মানে Characters Per Minute—প্রতি মিনিটে টাইপ করা অক্ষরের গতি।'],
+[['accuracy','নির্ভুলতা'],'Accuracy হলো টাইপ করা লেখার কত শতাংশ সঠিক হয়েছে তার হিসাব।'],
+[['home row','asdf'],'English Home Row হলো A S D F এবং J K L ;। বাম হাত ASDF এবং ডান হাত JKL; অবস্থানে রাখুন।'],
+[['touch typing','টাচ টাইপিং'],'Touch Typing হলো কিবোর্ডের দিকে না তাকিয়ে নির্দিষ্ট আঙুলের অবস্থান ব্যবহার করে টাইপ করা।'],
+[['bijoy','বাংলা টাইপ'],'বাংলা টাইপিংয়ে আপনার ব্যবহৃত Bijoy keyboard layout অনুসরণ করুন। লেআউটভেদে কী-র অবস্থান আলাদা হতে পারে।'],
+[['কোর্স','excel','word','powerpoint','photoshop'],'কোর্স পরিকল্পনা: English ও বাংলা Typing, MS Word, MS Excel, MS PowerPoint, Photoshop এবং অন্যান্য প্রয়োজনীয় কম্পিউটার দক্ষতা। বর্তমানে Typing মডিউল চালু; বাকিগুলো পরে যোগ হবে।']
+];
+function answerBot(q){const t=q.toLowerCase();for(const row of botFaq){if(row[0].some(k=>t.includes(k)))return row[1]}if(/হ্যালো|hello|সালাম/.test(t))return 'স্বাগতম! কিবোর্ড শর্টকাট, টাইপিং বা কোর্সের বিষয় জিজ্ঞেস করুন।';return 'এই প্রশ্নের উত্তর এখনো আমার তথ্যভান্ডারে নেই। নির্দিষ্ট করে লিখুন—যেমন Ctrl+S, WPM, CPM, Home Row বা Bijoy typing।'}
+function botMessage(t,who){const d=document.createElement('div');d.className='bot-message '+(who==='user'?'bot-question':'bot-answer');d.textContent=t;$('botMessages').appendChild(d);$('botMessages').scrollTop=$('botMessages').scrollHeight}
+$('botToggle').onclick=()=>{$('botPanel').hidden=!$('botPanel').hidden;$('botToggle').setAttribute('aria-expanded',String(!$('botPanel').hidden));if(!$('botPanel').hidden)$('botInput').focus()};
+$('botClose').onclick=()=>{$('botPanel').hidden=true;$('botToggle').setAttribute('aria-expanded','false')};
+$('botForm').onsubmit=e=>{e.preventDefault();const q=$('botInput').value.trim();if(!q)return;botMessage(q,'user');$('botInput').value='';botMessage(answerBot(q),'bot')};
 $('finalBtn').onclick=beginExam;$('voiceToggle').onclick=()=>{S.settings.voiceOn=!S.settings.voiceOn;save();voiceStatus();if(S.settings.voiceOn)speak('বাংলা নির্দেশনা চালু হয়েছে। এখন থেকে আমি আপনাকে ধাপে ধাপে গাইড করব।');else if('speechSynthesis'in window)speechSynthesis.cancel()};render();voiceStatus()})();
