@@ -21,7 +21,7 @@ Open `index.html` in a modern browser. Progress and settings are stored in that 
 - Learn and Game phases with configurable 1–60 minute durations.
 - Inactivity-aware practice timer; manual Pause stays paused until Resume.
 - Typing feedback, WPM/CPM, accuracy, error counts and per-track best score.
-- Three selectable typing game presentations: Word Rain, Turbo Race and Bubble Pop.
+- Three dedicated typing mini-games: Turbo Car (typing accelerates the car), Monkey Tree Climb (each correctly typed word moves the monkey up one branch), and Falling Word Balloons (type the word shown on each descending balloon to pop it).
 - Bengali Unicode key input based on the publicly documented UniBijoy-style normal/Shift chart, including common linker-key vowel sequences and pre-base vowel-sign composition.
 - Grapheme-aware Bengali counting, with a fallback for browsers without Intl.Segmenter.
 - Final English/Bangla typing tests and printable pass certificates.
