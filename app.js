@@ -112,7 +112,7 @@ function renderKeyboard(){
  highlightKey();
 }
 function highlightKey(){
- const keys=$('keyboard').querySelectorAll('.key');keys.forEach(k=>k.classList.remove('key-active'));
+ const keys=$('keyboard').querySelectorAll?.('.key')||[];keys.forEach(k=>k.classList.remove('key-active'));
  if(!run||run.ph!=='learn')return;
  const expected=units(run.txt)[units($('typing').value||'').length];if(!expected)return;
  let hit;
