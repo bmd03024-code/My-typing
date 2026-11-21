@@ -64,7 +64,120 @@ const bn=[
 ["চূড়ান্ত পুনরালোচনা","বাংলা ভাষা আমাদের পরিচয় ও গৌরব।","প্রতিদিন অনুশীলন করলে দক্ষতা বাড়ে।","নির্ভুলতা আগে, গতি পরে।"]
 ];
 return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:row.slice(1).join(' '),game:row.slice(1).join(' ')}));
-}function cur(){return S.curriculum||{en:days('en'),bn:days('bn')}}function count(t){return Object.values(S.progress[t]).filter(p=>p.learn&&p.game).length}function render(){let a=count('en'),b=count('bn'),n=a+b;$('days').textContent=n+' / 60';$('percent').textContent=Math.round(n/60*100)+'%';$('totalBar').style.width=n/60*100+'%';$('enBar').style.width=a/30*100+'%';$('bnBar').style.width=b/30*100+'%';$('enBest').textContent=S.best.en||0;$('bnBest').textContent=S.best.bn||0;$('bangla').disabled=a<30;$('bangla').textContent=a<30?'লকড':'শুরু করুন';$('final').classList.toggle('hide',!(a===30&&b===30));let h='';for(let t of ['en','bn'])for(let i=1;i<=30;i++){let p=S.progress[t][i];h+='<div class="chip '+(p?.learn&&p?.game?'done':'')+'">'+t.toUpperCase()+' '+i+' · '+(p?.learn&&p?.game?'✓':'বাকি')+'</div>'}$('records').innerHTML=h;document.body.classList.toggle('light',S.theme==='light')}function first(t){for(let i=1;i<=30;i++)if(!S.progress[t][i]?.learn||!S.progress[t][i]?.game)return i;return 30}function open(t,d=first(t),phase){if(t==='bn'&&count('en')<30)return alert('প্রথমে English track-এর ৩০ দিন শেষ করুন।');let day=cur()[t][d-1],p=S.progress[t][d]||{},ph=phase||(!p.learn?'learn':'game');run={t,d,ph,txt:day[ph]||day.learn,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,active:0,started:false,done:false,stamp:Date.now()};$('lesson').classList.remove('hide');$('trackName').textContent=t==='en'?'ENGLISH QWERTY':'বাংলা BIJOY';$('lessonTitle').textContent='Day '+d+' · '+day.title;$('phase').textContent=ph==='learn'?'Learn':'Game';$('typing').value='';$('typing').disabled=false;$('message').textContent='টাইপ শুরু করলে টাইমার চলবে; ৪ সেকেন্ড নিষ্ক্রিয় থাকলে থামবে।';$('games').classList.toggle('hide',ph!=='game');$('gameInfo').textContent='';$('next').disabled=true;target();$('clock').textContent=fmt(run.remaining);$('lesson').scrollIntoView({behavior:'smooth'})}function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}function target(){let v=$('typing').value||'',txt=run.txt;$('target').innerHTML=[...txt].map((c,i)=>'<span class="'+(i<v.length?(v[i]===c?'ok':'err'):(i===v.length?'nextchar':''))+'">'+esc(c)+'</span>').join('')}function esc(c){return c.replace(/[&<>]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[x]))}function metrics(){let m=Math.max(1/60,run.active/60),acc=run.typed?Math.round(run.correct/run.typed*100):100,wpm=Math.round(run.correct/5/m);$('metrics').textContent=wpm+' WPM · '+acc+'% accuracy · '+run.errors+' errors';return{wpm,acc}}function start(){if(!run)return;run.started=true;last=Date.now();clearInterval(tick);tick=setInterval(()=>{if(!run?.started)return;if(Date.now()-last>4000)return;run.remaining=Math.max(0,run.remaining-1);$('clock').textContent=fmt(run.remaining);$('phaseBar').style.width=(1-run.remaining/((run.ph==='learn'?S.settings.learn:S.settings.game)*60))*100+'%';if(!run.remaining)finish()},1000)}function pause(){if(run)run.started=false}function finish(){if(!run||run.done)return;run.done=true;pause();clearInterval(tick);let m=metrics(),p=S.progress[run.t][run.d]||{};p[run.ph]=true;p[run.ph+'Stats']=m;S.progress[run.t][run.d]=p;S.best[run.t]=Math.max(S.best[run.t]||0,run.t==='en'?m.wpm:Math.round(run.correct/Math.max(1,run.active/60)));$('message').textContent=run.ph==='learn'?'Learn সম্পন্ন। Game ধাপে যান।':'আজকের Game phase সম্পন্ন।';$('next').disabled=false;$('next').textContent=run.ph==='learn'?'Game শুরু':'পরের দিন';save()}function next(){if(!run)return;let {t,d,ph}=run;if(ph==='learn')open(t,d,'game');else if(d<30)open(t,d+1);else{$('lesson').classList.add('hide');alert(t==='en'?'English সম্পন্ন। বাংলা track unlock হয়েছে।':'দুই track সম্পন্ন। Grand Final প্রস্তুত।');render()}}function play(v){let n=run.correct;score=Math.max(0,n*10-run.errors*3);$('gameInfo').textContent=game+' · Score: '+score+' · '+(game==='race'?'🚗':'✦')}$('typing').addEventListener('input',()=>{if(!run)return;let v=$('typing').value,arr=[...v],tar=[...run.txt];run.typed=arr.length;run.correct=0;run.errors=0;arr.forEach((c,i)=>c===tar[i]?run.correct++:run.errors++);let now=Date.now();run.active+=Math.max(0,now-run.stamp)/1000;run.stamp=now;last=now;if(!run.started)start();target();metrics();if(run.ph==='game')play(v);if(arr.length>=tar.length)finish()});$('english').onclick=()=>open('en');$('bangla').onclick=()=>open('bn');$('start').onclick=start;$('pause').onclick=pause;$('next').onclick=next;$('close').onclick=()=>{$('lesson').classList.add('hide');pause();clearInterval(tick)};document.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>{game=b.dataset.game;score=0;$('gameInfo').textContent=game+' mode selected — practice by typing the target.'});$('theme').onclick=()=>{S.theme=S.theme==='dark'?'light':'dark';save()};$('backup').onclick=()=>download('my-typing-backup.json',JSON.stringify(S,null,2));function download(n,c){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([c],{type:'application/json'}));a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}$('adminOpen').onclick=()=>$('admin').showModal();$('loginBtn').onclick=()=>{if($('user').value===S.settings.user&&$('pass').value===S.settings.pass){$('login').classList.add('hide');$('tools').classList.remove('hide')}else alert('Username/password ভুল')};$('preview').onclick=()=>open($('admTrack').value,Math.max(1,Math.min(30,+$('admDay').value)),$('admPhase').value);$('unlock').onclick=()=>{alert('Preview override available for selected day.');open($('admTrack').value,+$('admDay').value,$('admPhase').value)};$('fast').onclick=()=>{if(run){run.remaining=0;finish()}};$('simulate').onclick=()=>{for(let t of ['en','bn'])for(let d=1;d<=30;d++)S.progress[t][d]={learn:true,game:true,simulated:true};save();alert('Progress simulation complete; Grand Final unlocked.')};$('reset').onclick=()=>{if(confirm('সব progress মুছবেন?')){S.progress={en:{},bn:{}};S.best={en:0,bn:0};save()}};$('settings').onclick=()=>{S.settings.learn=Math.max(1,+$('learnMin').value||15);S.settings.game=Math.max(1,+$('gameMin').value||15);S.settings.user=$('newUser').value||S.settings.user;S.settings.pass=$('newPass').value||S.settings.pass;save();alert('Settings saved')};$('exportCurr').onclick=()=>download('my-typing-curriculum.json',JSON.stringify(cur(),null,2));$('importCurr').onclick=()=>{try{let c=JSON.parse($('curriculumJSON').value);if(!Array.isArray(c.en)||c.en.length!==30||!Array.isArray(c.bn)||c.bn.length!==30)throw Error('English ও Bangla-তে ৩০টি করে দিন প্রয়োজন');S.curriculum=c;save();alert('Curriculum imported')}catch(e){alert(e.message)}};$('resetCurr').onclick=()=>{S.curriculum=null;save()};let examTimer=null;function beginExam(){
+}function cur(){return S.curriculum||{en:days('en'),bn:days('bn')}}function count(t){return Object.values(S.progress[t]).filter(p=>p.learn&&p.game).length}function render(){let a=count('en'),b=count('bn'),n=a+b;$('days').textContent=n+' / 60';$('percent').textContent=Math.round(n/60*100)+'%';$('totalBar').style.width=n/60*100+'%';$('enBar').style.width=a/30*100+'%';$('bnBar').style.width=b/30*100+'%';$('enBest').textContent=S.best.en||0;$('bnBest').textContent=S.best.bn||0;$('bangla').disabled=a<30;$('bangla').textContent=a<30?'লকড':'শুরু করুন';$('final').classList.toggle('hide',!(a===30&&b===30));let h='';for(let t of ['en','bn'])for(let i=1;i<=30;i++){let p=S.progress[t][i];h+='<div class="chip '+(p?.learn&&p?.game?'done':'')+'">'+t.toUpperCase()+' '+i+' · '+(p?.learn&&p?.game?'✓':'বাকি')+'</div>'}$('records').innerHTML=h;document.body.classList.toggle('light',S.theme==='light')}function first(t){for(let i=1;i<=30;i++)if(!S.progress[t][i]?.learn||!S.progress[t][i]?.game)return i;return 30}function open(t,d=first(t),phase){
+ if(t==='bn'&&count('en')<30)return alert('প্রথমে English track-এর ৩০ দিন শেষ করুন।');
+ const day=cur()[t][d-1],p=S.progress[t][d]||{},ph=phase||(!p.learn?'learn':'game');
+ const source=day[ph]||day.learn;
+ const pool=source.split(/(?<=[.!?।;])\\s+/).filter(Boolean);
+ const words=source.split(/\\s+/).filter(Boolean);
+ run={t,d,ph,source,pool:pool.length?pool:[source],words:words.length?words:[source],round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,active:0,activeMs:0,started:false,done:false,lastInputAt:0,lastTickAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
+ choosePrompt();
+ $('lesson').classList.remove('hide');
+ $('trackName').textContent=t==='en'?'ENGLISH QWERTY':'বাংলা BIJOY · Unicode';
+ $('lessonTitle').textContent='Day '+d+' · '+day.title;
+ $('phase').textContent=ph==='learn'?'Learn':'Game';
+ $('typing').value='';$('typing').disabled=false;
+ $('message').textContent='Start চাপুন, তারপর টাইপ করুন। ৪ সেকেন্ড টাইপ না করলে টাইমার থামবে; আবার টাইপ করলে চলবে।';
+ $('games').classList.toggle('hide',ph!=='game');
+ $('gameInfo').textContent=ph==='game'?'গেম বেছে নিয়ে শব্দ/বাক্য টাইপ করুন।':'';
+ $('next').disabled=true;$('next').textContent='পরের ধাপ';
+ target();renderKeyboard();
+ $('clock').textContent=fmt(run.remaining);
+ $('phaseBar').style.width='0%';
+ $('lesson').scrollIntoView({behavior:'smooth'});
+}
+function choosePrompt(){
+ if(!run)return;
+ if(run.ph==='learn'){
+  run.txt=run.pool[run.round%run.pool.length];
+ }else if(game==='race'){
+  const n=4,start=(run.round*n)%run.words.length;
+  run.txt=Array.from({length:Math.min(n,run.words.length)},(_,i)=>run.words[(start+i)%run.words.length]).join(' ');
+ }else{
+  run.txt=run.words[run.round%run.words.length];
+ }
+}
+function renderKeyboard(){
+ const keys=run?.t==='bn'?['ঙ/ং','য/য়','ড/ঢ','প/ফ','ট/ঠ','চ/ছ','জ/ঝ','হ/ঞ','গ/ঘ','ড়/ঢ়','ৃ/র্','ু/ূ','ি/ী','া/অ','্/।','ব/ভ','ক/খ','ত/থ','দ/ধ','্র/্য','ও/ৗ','ে/ৈ','র/ল','ন/ণ','স/ষ','ম/শ']:['Q W E R T Y U I O P','A S D F G H J K L ;','Z X C V B N M'];
+ $('keyboard').innerHTML=keys.map(x=>'<span class="key">'+esc(x)+'</span>').join('');
+}
+function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}function target(){
+ if(!run)return;
+ let v=$('typing').value||'',txt=run.txt;
+ $('target').innerHTML='<small>'+ (run.ph==='game'?(game==='rain'?'☄ WORD RAIN':game==='race'?'🚗 TURBO RACE':'🫧 BUBBLE POP'):'PRACTICE')+' · Round '+(run.round+1)+'</small><br>'+[...txt].map((c,i)=>'<span class="'+(i<v.length?(v[i]===c?'ok':'err'):(i===v.length?'nextchar':''))+'">'+esc(c)+'</span>').join('');
+}function esc(c){return c.replace(/[&<>]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[x]))}function metrics(){
+ let m=Math.max(1/60,run.activeMs/60000),acc=run.typed?Math.round(run.correct/run.typed*100):100,wpm=Math.round(run.correct/5/m);
+ $('metrics').textContent=wpm+' WPM · '+acc+'% accuracy · '+run.errors+' errors';
+ return{wpm,acc};
+}
+function start(){
+ if(!run||run.done)return;
+ if(run.started)return;
+ run.started=true;run.lastTickAt=Date.now();
+ clearInterval(tick);
+ tick=setInterval(()=>{
+  if(!run?.started||run.done)return;
+  const now=Date.now(),dt=Math.max(0,Math.min(1000,now-run.lastTickAt));
+  run.lastTickAt=now;
+  if(run.lastInputAt&&now-run.lastInputAt<=4000){
+   run.activeMs+=dt;run.active=run.activeMs/1000;run.remaining=Math.max(0,run.remaining-dt/1000);
+   $('clock').textContent=fmt(Math.ceil(run.remaining));
+   $('phaseBar').style.width=(1-run.remaining/run.initial)*100+'%';
+   if(run.remaining<=0)finish();
+  }
+ },250);
+}
+function pause(){if(run)run.started=false}function finish(){if(!run||run.done)return;run.done=true;pause();clearInterval(tick);let m=metrics(),p=S.progress[run.t][run.d]||{};p[run.ph]=true;p[run.ph+'Stats']=m;S.progress[run.t][run.d]=p;S.best[run.t]=Math.max(S.best[run.t]||0,run.t==='en'?m.wpm:Math.round(run.correct/Math.max(1,run.active/60)));$('message').textContent=run.ph==='learn'?'Learn সম্পন্ন। Game ধাপে যান।':'আজকের Game phase সম্পন্ন।';$('next').disabled=false;$('next').textContent=run.ph==='learn'?'Game শুরু':'পরের দিন';save()}function next(){if(!run)return;let {t,d,ph}=run;if(ph==='learn')open(t,d,'game');else if(d<30)open(t,d+1);else{$('lesson').classList.add('hide');alert(t==='en'?'English সম্পন্ন। বাংলা track unlock হয়েছে।':'দুই track সম্পন্ন। Grand Final প্রস্তুত।');render()}}function play(){
+ if(!run)return;
+ const bonus=Math.max(5,Math.round(metrics().wpm/2));
+ run.score+=bonus;run.rounds++;
+ const label=game==='rain'?'☄ শব্দ ধরুন':game==='race'?'🚗 গাড়ি এগিয়েছে':'🫧 বুদবুদ ফেটেছে';
+ $('gameInfo').textContent=label+' · Round '+run.rounds+' · Score '+run.score;
+}
+function completePrompt(){
+ run.round++;choosePrompt();$('typing').value='';run.typed=0;run.correct=0;run.errors=0;target();metrics();
+}
+const bijoy={
+ KeyQ:['ঙ','ং'],KeyW:['য','য়'],KeyE:['ড','ঢ'],KeyR:['প','ফ'],KeyT:['ট','ঠ'],KeyY:['চ','ছ'],KeyU:['জ','ঝ'],KeyI:['হ','ঞ'],KeyO:['গ','ঘ'],KeyP:['ড়','ঢ়'],
+ KeyA:['ৃ','র্'],KeyS:['ু','ূ'],KeyD:['ি','ী'],KeyF:['া','অ'],KeyG:['্','।'],KeyH:['ব','ভ'],KeyJ:['ক','খ'],KeyK:['ত','থ'],KeyL:['দ','ধ'],
+ KeyZ:['্র','্য'],KeyX:['ও','ৗ'],KeyC:['ে','ৈ'],KeyV:['র','ল'],KeyB:['ন','ণ'],KeyN:['স','ষ'],KeyM:['ম','শ'],
+ Backslash:['ৎ','ঃ'],Digit0:['০',')'],Digit1:['১','!'],Digit2:['২','@'],Digit3:['৩','#'],Digit4:['৪','৳'],Digit5:['৫','%'],Digit6:['৬','÷'],Digit7:['৭','ঁ'],Digit8:['৮','×'],Digit9:['৯','(']
+};
+const vowels={KeyA:'ঋ',KeyS:'উ',KeyD:'ই',KeyF:'আ',KeyC:'এ'};
+$('typing').addEventListener('keydown',e=>{
+ if(!run||run.t!=='bn'||e.ctrlKey||e.metaKey||e.altKey)return;
+ if(e.code==='Backspace'){run.pendingG=false;return;}
+ if(e.code==='Space'){if(run.pendingG){e.preventDefault();insertBangla('্ ');run.pendingG=false;}return;}
+ if(e.code==='KeyG'&&!e.shiftKey){e.preventDefault();run.pendingG=true;return;}
+ const pair=bijoy[e.code];
+ if(!pair){if(run.pendingG){e.preventDefault();insertBangla('্'+e.key);run.pendingG=false;}return;}
+ e.preventDefault();
+ let out=pair[e.shiftKey?1:0];
+ if(run.pendingG){
+  const vowel=(!e.shiftKey&&vowels[e.code])||(e.shiftKey&&e.code==='KeyD'?'ঈ':e.shiftKey&&e.code==='KeyS'?'ঊ':e.shiftKey&&e.code==='KeyC'?'ঐ':e.shiftKey&&e.code==='KeyX'?'ঔ':null);
+  out=vowel||('্'+out);run.pendingG=false;
+ }
+ insertBangla(out);
+});
+function insertBangla(value){
+ const el=$('typing'),a=el.selectionStart,b=el.selectionEnd;
+ el.setRangeText(value,a,b,'end');el.dispatchEvent(new Event('input',{bubbles:true}));
+}\n$('typing').addEventListener('input',()=>{
+ if(!run||run.done)return;
+ const now=Date.now();run.lastInputAt=now;if(!run.started)start();
+ const v=$('typing').value,arr=[...v],tar=[...run.txt];
+ run.typed=arr.length;run.correct=0;run.errors=0;
+ arr.forEach((c,i)=>c===tar[i]?run.correct++:run.errors++);
+ target();metrics();
+ if(arr.length>=tar.length){
+  if(arr.join('')===tar.join('')){
+   if(run.ph==='game')play();else run.round++;
+   completePrompt();
+  }
+ }
+});$('english').onclick=()=>open('en');$('bangla').onclick=()=>open('bn');$('start').onclick=()=>{if(run){start();$('message').textContent='টাইপ করলে সময় গণনা শুরু হবে; ৪ সেকেন্ড বিরতিতে থামবে।'}};$('pause').onclick=pause;$('next').onclick=next;$('close').onclick=()=>{$('lesson').classList.add('hide');pause();clearInterval(tick)};document.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>{
+ game=b.dataset.game;if(run&&run.ph==='game'){run.round=0;run.score=0;choosePrompt();$('typing').value='';run.typed=run.correct=run.errors=0;target();$('gameInfo').textContent=(game==='rain'?'☄ Word Rain':game==='race'?'🚗 Turbo Car Race':'🫧 Bubble Pop')+' চালু হয়েছে।';}
+});$('theme').onclick=()=>{S.theme=S.theme==='dark'?'light':'dark';save()};$('backup').onclick=()=>download('my-typing-backup.json',JSON.stringify(S,null,2));function download(n,c){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([c],{type:'application/json'}));a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}$('adminOpen').onclick=()=>$('admin').showModal();$('loginBtn').onclick=()=>{if($('user').value===S.settings.user&&$('pass').value===S.settings.pass){$('login').classList.add('hide');$('tools').classList.remove('hide')}else alert('Username/password ভুল')};$('preview').onclick=()=>open($('admTrack').value,Math.max(1,Math.min(30,+$('admDay').value)),$('admPhase').value);$('unlock').onclick=()=>{alert('Preview override available for selected day.');open($('admTrack').value,+$('admDay').value,$('admPhase').value)};$('fast').onclick=()=>{if(run){run.remaining=0;finish()}};$('simulate').onclick=()=>{for(let t of ['en','bn'])for(let d=1;d<=30;d++)S.progress[t][d]={learn:true,game:true,simulated:true};save();alert('Progress simulation complete; Grand Final unlocked.')};$('reset').onclick=()=>{if(confirm('সব progress মুছবেন?')){S.progress={en:{},bn:{}};S.best={en:0,bn:0};save()}};$('settings').onclick=()=>{S.settings.learn=Math.max(1,+$('learnMin').value||15);S.settings.game=Math.max(1,+$('gameMin').value||15);S.settings.user=$('newUser').value||S.settings.user;S.settings.pass=$('newPass').value||S.settings.pass;save();alert('Settings saved')};$('exportCurr').onclick=()=>download('my-typing-curriculum.json',JSON.stringify(cur(),null,2));$('importCurr').onclick=()=>{try{let c=JSON.parse($('curriculumJSON').value);if(!Array.isArray(c.en)||c.en.length!==30||!Array.isArray(c.bn)||c.bn.length!==30)throw Error('English ও Bangla-তে ৩০টি করে দিন প্রয়োজন');S.curriculum=c;save();alert('Curriculum imported')}catch(e){alert(e.message)}};$('resetCurr').onclick=()=>{S.curriculum=null;save()};let examTimer=null;function beginExam(){
 const t=prompt('পরীক্ষার ভাষা লিখুন: en অথবা bn','en');if(!['en','bn'].includes((t||'').toLowerCase()))return;const lang=t.toLowerCase(),passage=lang==='en'?'Typing is a valuable skill for education and work. A careful typist focuses on accuracy before speed. Practice every day, keep a steady rhythm, and use the correct fingers. Digital communication helps people share ideas across the world.': 'বাংলা আমাদের মাতৃভাষা। শুদ্ধভাবে বাংলা টাইপ করা শিক্ষা ও কর্মক্ষেত্রে একটি প্রয়োজনীয় দক্ষতা। নিয়মিত অনুশীলন করলে নির্ভুলতা ও গতি দুটোই বাড়ে। ধৈর্য ধরে সঠিকভাবে লিখতে হবে।';
 let left=300,started=Date.now();$('finalInfo').innerHTML='<h3>'+(lang==='en'?'English':'বাংলা')+' · ৫ মিনিটের পরীক্ষা</h3><p id="examClock">5:00</p><div class="target" id="examTarget"></div><textarea id="examInput" rows="5" placeholder="এখানে পরীক্ষা দিন…" spellcheck="false"></textarea><p id="examMetrics">0 WPM · 100% accuracy</p><button id="examStop">পরীক্ষা শেষ করুন</button>';const inp=$('examInput'),tar=$('examTarget');tar.textContent=passage;inp.focus();let active=0,lastAt=Date.now();function update(){let typed=[...inp.value],goal=[...passage],good=0;typed.forEach((x,i)=>{if(x===goal[i])good++});let mins=Math.max((Date.now()-started)/60000,1/60),acc=typed.length?good/typed.length*100:100,units=lang==='en'?good/5:good;let wpm=Math.round(units/mins);$('examMetrics').textContent=wpm+' '+(lang==='en'?'WPM':'গ্রাফিম/মিনিট')+' · '+Math.round(acc)+'% accuracy · '+typed.length+' typed';return{wpm,acc:Math.round(acc),typed:typed.length,good};}
 inp.addEventListener('input',update);function conclude(){clearInterval(examTimer);inp.disabled=true;let r=update(),pass=lang==='en'?r.wpm>=30&&r.acc>=92:r.wpm>=20&&r.acc>=90;$('finalInfo').insertAdjacentHTML('beforeend','<h3>'+(pass?'লক্ষ্যমাত্রা অর্জিত':'লক্ষ্যমাত্রা অর্জিত হয়নি')+'</h3><p>ফলাফল: '+r.wpm+' '+(lang==='en'?'WPM':'গ্রাফিম/মিনিট')+' · '+r.acc+'% accuracy</p><button id="certificate">Certificate / Print</button>');$('certificate').onclick=()=>{let w=window.open('','_blank');if(!w)return alert('Popup blocked. Allow popups to print.');w.document.write('<!doctype html><html><meta charset="utf-8"><title>My Typing Certificate</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:60px;border:12px double #276b61;margin:25px}h1{font-size:38px;color:#276b61}.score{font-size:22px;margin:30px}</style><h1>Certificate of Achievement</h1><p>This certifies that</p><h2>'+esc(prompt('শিক্ষার্থীর নাম লিখুন','Student'))+'</h2><p>completed the My Typing '+(lang==='en'?'English':'Bangla')+' final typing test.</p><div class="score">'+r.wpm+' '+(lang==='en'?'WPM':'গ্রাফিম/মিনিট')+' · '+r.acc+'% accuracy</div><p>Date: '+new Date().toLocaleDateString()+'</p><p>My Typing LMS</p><script>window.print()<\/script></html>');w.document.close()};}
