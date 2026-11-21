@@ -14,6 +14,8 @@ Open `index.html` in a modern browser. Progress and settings are stored in that 
 
 ## Included features
 
+- Bengali spoken guidance throughout the app: lesson instructions, encouragement, gentle error correction, phase completion and final-exam feedback. Guidance stays in clear Bengali even during English typing lessons. Speech uses the browser's Bengali text-to-speech voice when available; learners can toggle voice on or off.
+
 - Responsive interface with dark/light theme.
 - 30-day English and 30-day Bengali practice tracks.
 - Learn and Game phases with configurable 1–60 minute durations.
