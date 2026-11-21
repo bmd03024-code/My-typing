@@ -68,8 +68,8 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
  if(t==='bn'&&count('en')<30)return alert('প্রথমে English track-এর ৩০ দিন শেষ করুন।');
  const day=cur()[t][d-1],p=S.progress[t][d]||{},ph=phase||(!p.learn?'learn':'game');
  const source=day[ph]||day.learn;
- const pool=source.split(/(?<=[.!?।;])\\s+/).filter(Boolean);
- const words=source.split(/\\s+/).filter(Boolean);
+ const pool=source.split(/(?<=[.!?।;])\s+/).filter(Boolean);
+ const words=source.split(/\s+/).filter(Boolean);
  run={t,d,ph,source,pool:pool.length?pool:[source],words:words.length?words:[source],round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,active:0,activeMs:0,started:false,done:false,lastInputAt:0,lastTickAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
  choosePrompt();
  $('lesson').classList.remove('hide');
@@ -101,14 +101,15 @@ function renderKeyboard(){
  const keys=run?.t==='bn'?['ঙ/ং','য/য়','ড/ঢ','প/ফ','ট/ঠ','চ/ছ','জ/ঝ','হ/ঞ','গ/ঘ','ড়/ঢ়','ৃ/র্','ু/ূ','ি/ী','া/অ','্/।','ব/ভ','ক/খ','ত/থ','দ/ধ','্র/্য','ও/ৗ','ে/ৈ','র/ল','ন/ণ','স/ষ','ম/শ']:['Q W E R T Y U I O P','A S D F G H J K L ;','Z X C V B N M'];
  $('keyboard').innerHTML=keys.map(x=>'<span class="key">'+esc(x)+'</span>').join('');
 }
+function units(value){return typeof Intl!=='undefined'&&Intl.Segmenter?[...new Intl.Segmenter('bn',{granularity:'grapheme'}).segment(value)].map(x=>x.segment):Array.from(value)}
 function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}function target(){
  if(!run)return;
- let v=$('typing').value||'',txt=run.txt;
+ let v=units($('typing').value||''),txt=units(run.txt);
  $('target').innerHTML='<small>'+ (run.ph==='game'?(game==='rain'?'☄ WORD RAIN':game==='race'?'🚗 TURBO RACE':'🫧 BUBBLE POP'):'PRACTICE')+' · Round '+(run.round+1)+'</small><br>'+[...txt].map((c,i)=>'<span class="'+(i<v.length?(v[i]===c?'ok':'err'):(i===v.length?'nextchar':''))+'">'+esc(c)+'</span>').join('');
 }function esc(c){return c.replace(/[&<>]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[x]))}function metrics(){
- let m=Math.max(1/60,run.activeMs/60000),acc=run.typed?Math.round(run.correct/run.typed*100):100,wpm=Math.round(run.correct/5/m);
- $('metrics').textContent=wpm+' WPM · '+acc+'% accuracy · '+run.errors+' errors';
- return{wpm,acc};
+ let m=Math.max(1/60,run.activeMs/60000),acc=run.typed?Math.round(run.correct/run.typed*100):100,speed=run.t==='en'?Math.round(run.correct/5/m):Math.round(run.correct/m),unit=run.t==='en'?'WPM':'CPM';
+ $('metrics').textContent=speed+' '+unit+' · '+acc+'% accuracy · '+run.errors+' errors';
+ return{wpm:speed,acc,unit};
 }
 function start(){
  if(!run||run.done)return;
@@ -166,7 +167,7 @@ function insertBangla(value){
 $('typing').addEventListener('input',()=>{
  if(!run||run.done)return;
  const now=Date.now();run.lastInputAt=now;if(!run.started)start();
- const v=$('typing').value,arr=[...v],tar=[...run.txt];
+ const v=$('typing').value,arr=units(v),tar=units(run.txt);
  run.typed=arr.length;run.correct=0;run.errors=0;
  arr.forEach((c,i)=>c===tar[i]?run.correct++:run.errors++);
  target();metrics();
@@ -180,7 +181,7 @@ $('typing').addEventListener('input',()=>{
  game=b.dataset.game;if(run&&run.ph==='game'){run.round=0;run.score=0;choosePrompt();$('typing').value='';run.typed=run.correct=run.errors=0;target();$('gameInfo').textContent=(game==='rain'?'☄ Word Rain':game==='race'?'🚗 Turbo Car Race':'🫧 Bubble Pop')+' চালু হয়েছে।';}
 });$('theme').onclick=()=>{S.theme=S.theme==='dark'?'light':'dark';save()};$('backup').onclick=()=>download('my-typing-backup.json',JSON.stringify(S,null,2));function download(n,c){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([c],{type:'application/json'}));a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}$('adminOpen').onclick=()=>$('admin').showModal();$('loginBtn').onclick=()=>{if($('user').value===S.settings.user&&$('pass').value===S.settings.pass){$('login').classList.add('hide');$('tools').classList.remove('hide')}else alert('Username/password ভুল')};$('preview').onclick=()=>open($('admTrack').value,Math.max(1,Math.min(30,+$('admDay').value)),$('admPhase').value);$('unlock').onclick=()=>{alert('Preview override available for selected day.');open($('admTrack').value,+$('admDay').value,$('admPhase').value)};$('fast').onclick=()=>{if(run){run.remaining=0;finish()}};$('simulate').onclick=()=>{for(let t of ['en','bn'])for(let d=1;d<=30;d++)S.progress[t][d]={learn:true,game:true,simulated:true};save();alert('Progress simulation complete; Grand Final unlocked.')};$('reset').onclick=()=>{if(confirm('সব progress মুছবেন?')){S.progress={en:{},bn:{}};S.best={en:0,bn:0};save()}};$('settings').onclick=()=>{S.settings.learn=Math.max(1,+$('learnMin').value||15);S.settings.game=Math.max(1,+$('gameMin').value||15);S.settings.user=$('newUser').value||S.settings.user;S.settings.pass=$('newPass').value||S.settings.pass;save();alert('Settings saved')};$('exportCurr').onclick=()=>download('my-typing-curriculum.json',JSON.stringify(cur(),null,2));$('importCurr').onclick=()=>{try{let c=JSON.parse($('curriculumJSON').value);if(!Array.isArray(c.en)||c.en.length!==30||!Array.isArray(c.bn)||c.bn.length!==30)throw Error('English ও Bangla-তে ৩০টি করে দিন প্রয়োজন');S.curriculum=c;save();alert('Curriculum imported')}catch(e){alert(e.message)}};$('resetCurr').onclick=()=>{S.curriculum=null;save()};let examTimer=null;function beginExam(){
 const t=prompt('পরীক্ষার ভাষা লিখুন: en অথবা bn','en');if(!['en','bn'].includes((t||'').toLowerCase()))return;const lang=t.toLowerCase(),passage=lang==='en'?'Typing is a valuable skill for education and work. A careful typist focuses on accuracy before speed. Practice every day, keep a steady rhythm, and use the correct fingers. Digital communication helps people share ideas across the world.': 'বাংলা আমাদের মাতৃভাষা। শুদ্ধভাবে বাংলা টাইপ করা শিক্ষা ও কর্মক্ষেত্রে একটি প্রয়োজনীয় দক্ষতা। নিয়মিত অনুশীলন করলে নির্ভুলতা ও গতি দুটোই বাড়ে। ধৈর্য ধরে সঠিকভাবে লিখতে হবে।';
-let left=300,started=Date.now();$('finalInfo').innerHTML='<h3>'+(lang==='en'?'English':'বাংলা')+' · ৫ মিনিটের পরীক্ষা</h3><p id="examClock">5:00</p><div class="target" id="examTarget"></div><textarea id="examInput" rows="5" placeholder="এখানে পরীক্ষা দিন…" spellcheck="false"></textarea><p id="examMetrics">0 WPM · 100% accuracy</p><button id="examStop">পরীক্ষা শেষ করুন</button>';const inp=$('examInput'),tar=$('examTarget');tar.textContent=passage;inp.focus();let active=0,lastAt=Date.now();function update(){let typed=[...inp.value],goal=[...passage],good=0;typed.forEach((x,i)=>{if(x===goal[i])good++});let mins=Math.max((Date.now()-started)/60000,1/60),acc=typed.length?good/typed.length*100:100,units=lang==='en'?good/5:good;let wpm=Math.round(units/mins);$('examMetrics').textContent=wpm+' '+(lang==='en'?'WPM':'গ্রাফিম/মিনিট')+' · '+Math.round(acc)+'% accuracy · '+typed.length+' typed';return{wpm,acc:Math.round(acc),typed:typed.length,good};}
+let left=300,started=Date.now();$('finalInfo').innerHTML='<h3>'+(lang==='en'?'English':'বাংলা')+' · ৫ মিনিটের পরীক্ষা</h3><p id="examClock">5:00</p><div class="target" id="examTarget"></div><textarea id="examInput" rows="5" placeholder="এখানে পরীক্ষা দিন…" spellcheck="false"></textarea><p id="examMetrics">0 WPM · 100% accuracy</p><button id="examStop">পরীক্ষা শেষ করুন</button>';const inp=$('examInput'),tar=$('examTarget');tar.textContent=passage;inp.focus();let active=0,lastAt=Date.now();function update(){let typed=units(inp.value),goal=units(passage),good=0;typed.forEach((x,i)=>{if(x===goal[i])good++});let mins=Math.max((Date.now()-started)/60000,1/60),acc=typed.length?good/typed.length*100:100,speed=lang==='en'?good/5/mins:good/mins;let wpm=Math.round(speed);$('examMetrics').textContent=wpm+' '+(lang==='en'?'WPM':'CPM')+' · '+Math.round(acc)+'% accuracy · '+typed.length+' typed';return{wpm,acc:Math.round(acc),typed:typed.length,good};}
 inp.addEventListener('input',update);function conclude(){clearInterval(examTimer);inp.disabled=true;let r=update(),pass=lang==='en'?r.wpm>=30&&r.acc>=92:r.wpm>=20&&r.acc>=90;$('finalInfo').insertAdjacentHTML('beforeend','<h3>'+(pass?'লক্ষ্যমাত্রা অর্জিত':'লক্ষ্যমাত্রা অর্জিত হয়নি')+'</h3><p>ফলাফল: '+r.wpm+' '+(lang==='en'?'WPM':'গ্রাফিম/মিনিট')+' · '+r.acc+'% accuracy</p><button id="certificate">Certificate / Print</button>');$('certificate').onclick=()=>{let w=window.open('','_blank');if(!w)return alert('Popup blocked. Allow popups to print.');w.document.write('<!doctype html><html><meta charset="utf-8"><title>My Typing Certificate</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:60px;border:12px double #276b61;margin:25px}h1{font-size:38px;color:#276b61}.score{font-size:22px;margin:30px}</style><h1>Certificate of Achievement</h1><p>This certifies that</p><h2>'+esc(prompt('শিক্ষার্থীর নাম লিখুন','Student'))+'</h2><p>completed the My Typing '+(lang==='en'?'English':'Bangla')+' final typing test.</p><div class="score">'+r.wpm+' '+(lang==='en'?'WPM':'গ্রাফিম/মিনিট')+' · '+r.acc+'% accuracy</div><p>Date: '+new Date().toLocaleDateString()+'</p><p>My Typing LMS</p><script>window.print()<\/script></html>');w.document.close()};}
 $('examStop').onclick=conclude;examTimer=setInterval(()=>{left--;let el=$('examClock');if(el)el.textContent=fmt(left);if(left<=0)conclude()},1000);
 }
