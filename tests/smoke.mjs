@@ -25,6 +25,13 @@ assert.ok(app.includes('txt.map((ch,i)=>'), 'typing target must render grapheme 
 assert.ok(app.includes('lastNudgeAt') && app.includes('>=30000') && app.includes('>=90000'), 'teacher should give sparse inactivity nudges');
 assert.ok(app.includes('শেষ অক্ষরটি মেলেনি'), 'teacher should give actionable typing-error feedback');
 assert.ok(css.includes('.key-row'), 'physical keyboard rows must have layout styling');
+assert.ok(app.includes('goalWords:Math.max(1,words.length)'), 'each lesson must have a word-count goal');
+assert.ok(app.includes('run.completedWords>=run.goalWords'), 'lesson must finish only after its word goal');
+assert.ok(!app.includes('if(run.remaining<=0)finish()'), 'lesson must not stop at a timer cutoff');
+assert.ok(app.includes("toggle('hide',ph!=='learn')"), 'keyboard must be hidden outside Learning Mode');
+assert.ok(app.includes('highlightKey()'), 'learning keyboard must highlight the next key');
+assert.ok(css.includes('.key-active'), 'active key must have a visible highlight');
+
 
 console.log('My Typing static smoke checks passed.');
 console.log('Note: these checks do not replace real browser, keyboard, or end-to-end tests.');
