@@ -12,3 +12,6 @@
 .key-row{display:flex;gap:5px;flex-wrap:nowrap;margin:4px 0}.key-row .key{min-width:34px;text-align:center;padding:5px 7px}.key-row .key small{display:block;font-size:10px;line-height:1.2}.keyboard{overflow-x:auto;padding-bottom:5px}
 
 #voiceToggle{border:1px solid var(--accent);font-weight:700}.actions{flex-wrap:wrap}
+
+/* Learning-only full keyboard guidance */
+#keyboard.hide{display:none!important}.key-row{display:flex;justify-content:center;gap:5px;margin:5px 0}.key-row .key{min-width:clamp(25px,5vw,48px);min-height:42px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:4px}.key-row .key small{font-size:10px;color:var(--muted)}.key-row .wide-key{min-width:48%;font-weight:700}.key-row .key-active{background:#f4d35e;color:#172338;border:2px solid #e4a11b;box-shadow:0 0 0 3px #f4d35e55;transform:translateY(-2px)}
