@@ -78,7 +78,7 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
  const source=day[ph]||day.learn;
  const pool=source.split(/(?<=[.!?।;])\s+/).filter(Boolean);
  const words=source.split(/\s+/).filter(Boolean);
- run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],goalWords:Math.max(1,words.length),completedWords:0,promptWords:0,round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,manualPaused:false,done:false,lastInputAt:0,lastTickAt:0,lastNudgeAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
+ run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],goalWords:Math.max(50,words.length),completedWords:0,promptWords:0,round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,manualPaused:false,done:false,lastInputAt:0,lastTickAt:0,lastNudgeAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
  choosePrompt();
  $('lesson').classList.remove('hide');
  $('trackName').textContent=t==='en'?'ENGLISH QWERTY':'বাংলা UniBijoy Unicode';
@@ -90,7 +90,7 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
  $('gameInfo').textContent=ph==='game'?'গেম বেছে নিয়ে শব্দ বা বাক্য টাইপ করুন।':'';if(ph==='game')speak('এবার অনুশীলনের খেলার ধাপ। একটি খেলা বেছে নিন, তারপর পর্দায় দেখানো শব্দ টাইপ করুন।');
  $('next').disabled=true;$('next').textContent='পরের ধাপ';
  target();renderKeyboard();
- $('clock').textContent='0:00';
+ $('clock').textContent='0:00';const kc=$('keyboardClock');if(kc)kc.textContent='সময় 0:00';
  $('phaseBar').style.width='0%';
  $('lesson').scrollIntoView({behavior:'smooth'});
 }
@@ -108,7 +108,7 @@ function choosePrompt(){
 function renderKeyboard(){
  const enRows=[['1','2','3','4','5','6','7','8','9','0'],['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L',';'],['Z','X','C','V','B','N','M',',','.','/']];
  const bnMap={Q:['ঙ','ং'],W:['য','য়'],E:['ড','ঢ'],R:['প','ফ'],T:['ট','ঠ'],Y:['চ','ছ'],U:['জ','ঝ'],I:['হ','ঞ'],O:['গ','ঘ'],P:['ড়','ঢ়'],A:['ৃ','র্'],S:['ু','ূ'],D:['ি','ী'],F:['া','অ'],G:['্','।'],H:['ব','ভ'],J:['ক','খ'],K:['ত','থ'],L:['দ','ধ'],Z:['্র','্য'],X:['ও','ৗ'],C:['ে','ৈ'],V:['র','ল'],B:['ন','ণ'],N:['স','ষ'],M:['ম','শ']};
- $('keyboard').innerHTML=enRows.map((row,ri)=>'<div class="key-row">'+row.map(k=>'<span class="key" data-key="'+k+'" data-output="'+(bnMap[k]||[]).join('')+'"><b>'+k+'</b>'+(run.t==='bn'?'<small>'+(bnMap[k]||['','']).join(' / ')+'</small>':'')+'</span>').join('')+'</div>').join('')+'<div class="key-row"><span class="key wide-key" data-key="SPACE" data-output=" ">SPACE / স্পেস</span></div>';
+ $('keyboard').innerHTML='<div class="keyboard-guide"><span>👆 আঙুলের অবস্থান অনুসরণ করুন</span><strong id="keyboardClock">সময় 0:00</strong></div>'+enRows.map((row,ri)=>'<div class="key-row">'+row.map(k=>'<span class="key" data-key="'+k+'" data-output="'+(bnMap[k]||[]).join('')+'"><b>'+k+'</b>'+(run.t==='bn'?'<small>'+(bnMap[k]||['','']).join(' / ')+'</small>':'')+'</span>').join('')+'</div>').join('')+'<div class="key-row"><span class="key wide-key" data-key="SPACE" data-output=" ">SPACE / স্পেস</span></div><div class="finger-guide" aria-hidden="true"><span class="finger-palm">✋</span><span class="finger-label">পরবর্তী কী-তে আঙুল রাখুন</span></div>';
  highlightKey();
 }
 function highlightKey(){
@@ -147,7 +147,7 @@ function start(){
   }
   if(run.lastInputAt&&now-run.lastInputAt<=4000){
    run.activeMs+=dt;run.active=run.activeMs/1000;
-   $('clock').textContent=fmt(Math.floor(run.activeMs/1000));
+   $('clock').textContent=fmt(Math.floor(run.activeMs/1000));const kc=$('keyboardClock');if(kc)kc.textContent='সময় '+fmt(Math.floor(run.activeMs/1000));
   }
  },250);
 }
