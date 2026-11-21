@@ -289,4 +289,54 @@ $('botForm').onsubmit=e=>{e.preventDefault();sendBotQuestion($('botInput').value
 const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;let botRecognition=null,botListening=false;
 if(SpeechRecognition){botRecognition=new SpeechRecognition();botRecognition.lang='bn-BD';botRecognition.continuous=false;botRecognition.interimResults=true;botRecognition.onstart=()=>{botListening=true;$('botMic').textContent='⏹️';$('botVoiceStatus').textContent='🎙️ শুনছি… এখন আপনার প্রশ্ন বলুন।'};botRecognition.onresult=e=>{let finalText='';let interim='';for(let n=e.resultIndex;n<e.results.length;n++){if(e.results[n].isFinal)finalText+=e.results[n][0].transcript;else interim+=e.results[n][0].transcript}if(interim)$('botVoiceStatus').textContent='শুনছি: '+interim;if(finalText){$('botInput').value=finalText;sendBotQuestion(finalText,true)}};botRecognition.onerror=e=>{$('botVoiceStatus').textContent=e.error==='not-allowed'?'মাইক্রোফোন ব্যবহারের অনুমতি দিন।':e.error==='no-speech'?'কোনো কথা শোনা যায়নি। আবার চেষ্টা করুন।':'ভয়েস ইনপুটে সমস্যা হয়েছে। আবার চেষ্টা করুন।'};botRecognition.onend=()=>{botListening=false;$('botMic').textContent='🎙️';if($('botVoiceStatus').textContent==='🎙️ শুনছি… এখন আপনার প্রশ্ন বলুন।')$('botVoiceStatus').textContent='কথা শনাক্ত হয়নি। আবার 🎙️ চাপুন।'}}else{$('botMic').disabled=true;$('botVoiceStatus').textContent='এই ব্রাউজারে ভয়েস প্রশ্ন সমর্থিত নয়। Chrome-এ চেষ্টা করুন।'}
 $('botMic').onclick=()=>{if(!botRecognition){$('botVoiceStatus').textContent='ভয়েস ইনপুট সমর্থিত নয়। Chrome ব্রাউজারে চেষ্টা করুন।';return}if(botListening){botRecognition.stop();return}try{if('speechSynthesis'in window)speechSynthesis.cancel();botRecognition.start()}catch(err){$('botVoiceStatus').textContent='মাইক্রোফোন চালু করা যাচ্ছে না। একটু পরে চেষ্টা করুন।'}};
+
+/* MS Word practical learning workspace */
+const wordEditor=$('wordEditor');
+if(wordEditor){
+ const lessonData=[
+  ['Word পরিচিতি','Word-এ Ribbon-এর Home, Insert ও Layout ট্যাব থেকে কাজের টুল পাওয়া যায়। মাঝখানের সাদা অংশটি আপনার ডকুমেন্ট।','ডকুমেন্টের অংশগুলো চিনে নিন','Ribbon-এর Home, Insert ও Layout ট্যাব দেখুন।'],
+  ['লেখা ও সম্পাদনা','সাদা পাতায় ক্লিক করে লিখুন। লেখা নির্বাচন করে Ctrl+C দিয়ে কপি, Ctrl+V দিয়ে পেস্ট এবং Ctrl+Z দিয়ে আগের কাজ ফিরিয়ে আনতে পারেন।','লেখা টাইপ ও নির্বাচন','ডকুমেন্টে ক্লিক করে নিজের নাম ও ঠিকানা লিখুন।'],
+  ['Font ও Paragraph','লেখা নির্বাচন করে B, I, U, Font Size এবং রঙ ব্যবহার করুন। Paragraph অংশ থেকে বাম, মাঝখান বা ডানদিকে লেখা সাজান।','লেখার ধরন বদলান','একটি শিরোনাম লিখে Bold ও Center করুন।'],
+  ['Insert Table','Insert ট্যাবে গিয়ে Row ও Column-এর সংখ্যা লিখুন, তারপর Insert Table চাপুন। ডকুমেন্টে সম্পাদনাযোগ্য টেবিল তৈরি হবে।','টেবিল তৈরি হচ্ছে','৩টি Row ও ৩টি Column দিয়ে একটি টেবিল তৈরি করুন।'],
+  ['Row / Column পরিচালনা','টেবিলের যে ঘরে কাজ করবেন সেখানে ক্লিক করুন। এরপর Row Above/Below বা Column Left/Right চাপুন। নির্বাচিত ঘরের অবস্থান অনুযায়ী নতুন সারি বা কলাম যোগ হবে।','সারি ও কলাম যোগ','টেবিলের একটি ঘরে ক্লিক করে একটি Row এবং একটি Column যোগ করুন।'],
+  ['Page Layout','Layout ট্যাব থেকে Portrait বা Landscape বেছে নিন। A4 বা Letter কাগজ নির্বাচন করে Apply Layout চাপুন।','পাতার দিক পরিবর্তন','একবার Landscape করে আবার Portrait করুন।'],
+  ['Save ও Print প্রস্তুতি','এই অনুশীলন ব্রাউজারে স্বয়ংক্রিয়ভাবে সংরক্ষিত হয়। Download চাপলে HTML ডকুমেন্ট পাওয়া যাবে, যা ব্রাউজারে খুলে প্রিন্ট করা যায়।','ডকুমেন্ট সংরক্ষণ','Download চাপুন এবং ফাইলটি খুলে দেখুন।'],
+  ['বাস্তব কাজ','এবার একটি ক্লাস রুটিন তৈরি করুন: শিরোনাম লিখুন, ৫টি কলাম ও কয়েকটি সারি যোগ করুন, তারপর বিষয় ও সময় লিখুন।','ক্লাস রুটিন তৈরি','একটি ছোট ক্লাস রুটিন তৈরি করে ডাউনলোড করুন।']
+ ];
+ let currentLesson=0,selectedCell=null;
+ const getCell=()=>{const sel=window.getSelection();let node=sel&&sel.anchorNode;let el=node&&(node.nodeType===1?node:node.parentElement);return el&&el.closest?el.closest('#wordEditor td, #wordEditor th'):null};
+ const focusEditor=()=>{wordEditor.focus();if(selectedCell)selectedCell.focus()};
+ const saveWord=()=>{try{localStorage.setItem('msWordPracticeDoc',wordEditor.innerHTML);$('wordSaveStatus').textContent='✓ এই ডিভাইসে সংরক্ষিত';}catch(e){$('wordSaveStatus').textContent='সংরক্ষণ করা যায়নি';}const txt=wordEditor.innerText.trim();$('wordWordCount').textContent='শব্দ: '+(txt?txt.split(/\s+/).length:0)};
+ try{const saved=localStorage.getItem('msWordPracticeDoc');if(saved)wordEditor.innerHTML=saved}catch(e){}
+ wordEditor.addEventListener('input',saveWord);wordEditor.addEventListener('click',()=>{selectedCell=getCell()});
+ const setTab=name=>{document.querySelectorAll('[data-word-tab]').forEach(b=>b.classList.toggle('active',b.dataset.wordTab===name));document.querySelectorAll('[data-word-panel]').forEach(p=>p.hidden=p.dataset.wordPanel!==name)};
+ document.querySelectorAll('[data-word-tab]').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.wordTab)));
+ document.querySelectorAll('[data-cmd]').forEach(b=>b.addEventListener('click',()=>{focusEditor();document.execCommand(b.dataset.cmd,false,null);saveWord()}));
+ $('wordFont').onchange=e=>{focusEditor();document.execCommand('fontName',false,e.target.value);saveWord()};
+ $('wordSize').onchange=e=>{focusEditor();const map={'11':'2','12':'2','14':'3','16':'4','18':'4','20':'5','24':'5','28':'6','36':'7'};document.execCommand('fontSize',false,map[e.target.value]||'3');saveWord()};
+ $('wordColor').oninput=e=>{focusEditor();document.execCommand('foreColor',false,e.target.value);saveWord()};
+ const makeTable=(rows,cols)=>{let out='<table class="practice-table"><tbody>';for(let r=0;r<rows;r++){out+='<tr>';for(let c=0;c<cols;c++)out+='<td contenteditable="true">এখানে লিখুন</td>';out+='</tr>'}return out+'</tbody></table><p><br></p>'};
+ const insertHTML=markup=>{focusEditor();document.execCommand('insertHTML',false,markup);selectedCell=getCell();saveWord()};
+ $('wordInsertTable').onclick=()=>{const r=Math.max(1,Math.min(20,Number($('wordRows').value)||3)),c=Math.max(1,Math.min(12,Number($('wordCols').value)||3));insertHTML(makeTable(r,c));$('wordSaveStatus').textContent=r+' Row × '+c+' Column টেবিল যোগ হয়েছে।'};
+ const cellInfo=()=>{const cell=getCell()||selectedCell;if(!cell||!wordEditor.contains(cell)){alert('প্রথমে টেবিলের যে ঘরে কাজ করবেন সেখানে ক্লিক করুন।');return null}selectedCell=cell;return {cell,row:cell.parentElement,table:cell.closest('table')}};
+ const addRow=where=>{const x=cellInfo();if(!x)return;const row=x.row.cloneNode(true);row.querySelectorAll('td,th').forEach(td=>td.textContent='এখানে লিখুন');if(where==='above')x.row.parentElement.insertBefore(row,x.row);else x.row.parentElement.insertBefore(row,x.row.nextSibling);selectedCell=row.cells[Math.min(x.cell.cellIndex,row.cells.length-1)];saveWord()};
+ const addCol=where=>{const x=cellInfo();if(!x)return;const index=x.cell.cellIndex+(where==='right'?1:0);Array.from(x.table.rows).forEach(row=>{const td=document.createElement(row.cells[0]?.tagName==='TH'?'th':'td');td.textContent='এখানে লিখুন';row.insertBefore(td,row.cells[index]||null)});selectedCell=x.table.rows[x.cell.parentElement.rowIndex].cells[index];saveWord()};
+ $('wordRowAbove').onclick=()=>addRow('above');$('wordRowBelow').onclick=()=>addRow('below');$('wordColLeft').onclick=()=>addCol('left');$('wordColRight').onclick=()=>addCol('right');
+ $('wordDeleteRow').onclick=()=>{const x=cellInfo();if(!x)return;x.row.remove();selectedCell=null;saveWord()};
+ $('wordDeleteCol').onclick=()=>{const x=cellInfo();if(!x)return;const index=x.cell.cellIndex;Array.from(x.table.rows).forEach(row=>row.cells[index]?.remove());selectedCell=null;if(!x.table.rows.length||!x.table.rows[0].cells.length)x.table.remove();saveWord()};
+ $('wordDeleteTable').onclick=()=>{const x=cellInfo();if(!x)return;x.table.remove();selectedCell=null;saveWord()};
+ $('wordInsertDate').onclick=()=>insertHTML(new Date().toLocaleDateString('bn-BD'));
+ $('wordPageBreak').onclick=()=>insertHTML('<div class="practice-page-break">— নতুন পৃষ্ঠা —</div><p><br></p>');
+ $('wordOrientation').onchange=()=>{};
+ $('wordApplyLayout').onclick=()=>{const page=$('wordEditor');page.classList.toggle('landscape-page',$('wordOrientation').value==='landscape');page.dataset.paper=$('wordPaper').value;$('wordSaveStatus').textContent=$('wordPaper').value+' · '+$('wordOrientation').value+' প্রয়োগ হয়েছে';};
+ $('wordNew').onclick=()=>{if(!confirm('বর্তমান অনুশীলন মুছে নতুন ডকুমেন্ট শুরু করবেন?'))return;wordEditor.innerHTML='<h2>নতুন ডকুমেন্ট</h2><p>এখানে লেখা শুরু করুন…</p>';selectedCell=null;saveWord()};
+ $('wordDownload').onclick=()=>{const doc='<!doctype html><html lang="bn"><meta charset="utf-8"><title>My Word Practice</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;line-height:1.6}table{border-collapse:collapse;width:100%}td,th{border:1px solid #555;padding:8px}.landscape-page{max-width:1100px}</style><body>'+wordEditor.innerHTML+'</body></html>';const blob=new Blob([doc],{type:'text/html;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='my-word-practice.html';a.click();URL.revokeObjectURL(url);$('wordSaveStatus').textContent='ডকুমেন্ট ডাউনলোড হয়েছে'};
+ const showLesson=n=>{currentLesson=Math.max(0,Math.min(lessonData.length-1,n));const d=lessonData[currentLesson];$('wordLessonNumber').textContent='পাঠ '+(currentLesson+1)+' / '+lessonData.length;$('wordLessonTitle').textContent='পাঠ '+(currentLesson+1)+': '+d[0];$('wordLessonText').textContent=d[1];$('wordDemoCaption').textContent=d[2];$('wordTaskText').textContent=d[3];document.querySelectorAll('[data-lesson]').forEach(b=>b.classList.toggle('active',Number(b.dataset.lesson)===currentLesson));$('wordDemoMotion').classList.remove('demo-playing');void $('wordDemoMotion').offsetWidth;$('wordDemoMotion').classList.add('demo-playing')};
+ document.querySelectorAll('[data-lesson]').forEach(b=>b.onclick=()=>showLesson(Number(b.dataset.lesson)));
+ $('wordPrevLesson').onclick=()=>showLesson(currentLesson-1);$('wordNextLesson').onclick=()=>showLesson(currentLesson+1);$('wordStartLesson').onclick=()=>{showLesson(0);$('word-module').scrollIntoView({behavior:'smooth'})};
+ $('wordTaskInsert').onclick=()=>{setTab('insert');$('wordRows').value=4;$('wordCols').value=3;$('wordInsertTable').click();wordEditor.scrollIntoView({behavior:'smooth',block:'center'})};
+ wordEditor.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveWord();$('wordSaveStatus').textContent='✓ ডকুমেন্ট সংরক্ষিত';}});
+ saveWord();showLesson(0);
+}
+
 $('finalBtn').onclick=beginExam;$('voiceToggle').onclick=()=>{S.settings.voiceOn=!S.settings.voiceOn;save();voiceStatus();if(S.settings.voiceOn)speak('বাংলা নির্দেশনা চালু হয়েছে। এখন থেকে আমি আপনাকে ধাপে ধাপে গাইড করব।');else if('speechSynthesis'in window)speechSynthesis.cancel()};render();voiceStatus()})();
