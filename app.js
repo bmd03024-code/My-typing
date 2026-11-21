@@ -162,7 +162,8 @@ $('typing').addEventListener('keydown',e=>{
 function insertBangla(value){
  const el=$('typing'),a=el.selectionStart,b=el.selectionEnd;
  el.setRangeText(value,a,b,'end');el.dispatchEvent(new Event('input',{bubbles:true}));
-}\n$('typing').addEventListener('input',()=>{
+}
+$('typing').addEventListener('input',()=>{
  if(!run||run.done)return;
  const now=Date.now();run.lastInputAt=now;if(!run.started)start();
  const v=$('typing').value,arr=[...v],tar=[...run.txt];
@@ -171,7 +172,7 @@ function insertBangla(value){
  target();metrics();
  if(arr.length>=tar.length){
   if(arr.join('')===tar.join('')){
-   if(run.ph==='game')play();else run.round++;
+   if(run.ph==='game')play();
    completePrompt();
   }
  }
