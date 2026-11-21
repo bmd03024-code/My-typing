@@ -23,3 +23,5 @@ jobs:
         run: node --check app.js
       - name: Run static smoke checks
         run: node tests/smoke.mjs
+      - name: Run simulated runtime smoke checks
+        run: node tests/runtime.mjs
