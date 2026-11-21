@@ -23,3 +23,16 @@
 .finger-palm{display:inline-block;font-size:40px;transform-origin:50% 85%;animation:fingerPress 1.15s ease-in-out infinite}
 .finger-label{font-size:13px}
 @keyframes fingerPress{0%,100%{transform:translateY(0) rotate(-7deg)}45%{transform:translateY(-7px) rotate(2deg)}65%{transform:translateY(1px) scale(.96)}}
+
+/* Paired animated hands for Learning Mode */
+.hands-stage{display:flex;align-items:flex-end;justify-content:center;gap:clamp(14px,7vw,70px);flex-wrap:wrap;padding:18px 8px 10px;margin:14px auto 4px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(105,226,193,.07),transparent)}
+.hand-unit{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:120px}.hand-label{font-size:12px;color:var(--muted);font-weight:700}
+.palm{position:relative;width:126px;height:86px;border-radius:48% 48% 38% 38%;background:linear-gradient(145deg,#f4c9a7,#d99a73 65%,#b97558);box-shadow:inset -7px -7px 10px #8f513b55,inset 5px 5px 9px #fff7,0 7px 12px #0003;transform:rotate(-5deg)}
+.right-hand .palm{transform:scaleX(-1) rotate(-5deg)}
+.finger{position:absolute;display:block;width:19px;border-radius:13px 13px 9px 9px;background:linear-gradient(90deg,#bd795b,#f2c4a2 42%,#e3a783);box-shadow:inset -3px 0 4px #8d4e3b55,0 2px 3px #0002;transform-origin:50% 100%;transition:transform .14s ease,filter .14s ease}
+.finger:after{content:"";position:absolute;top:5px;left:4px;width:10px;height:8px;border-radius:6px;background:linear-gradient(#f8dfd0,#eab99f)}
+.f-pinky{height:43px;left:4px;top:-30px;transform:rotate(-13deg)}.f-ring{height:55px;left:27px;top:-43px;transform:rotate(-5deg)}.f-middle{height:62px;left:51px;top:-50px}.f-index{height:55px;left:76px;top:-43px;transform:rotate(5deg)}.f-thumb{height:42px;width:22px;left:96px;top:27px;transform:rotate(48deg);transform-origin:50% 10%}
+.finger.finger-active{filter:brightness(1.13);transform:translateY(13px) rotate(0deg) scaleY(.94);box-shadow:0 0 0 4px #69e2c177,0 3px 7px #0004}
+.right-hand .finger.finger-active{transform:translateY(13px) rotate(0deg) scaleY(.94)}
+.finger-label{flex-basis:100%;text-align:center;color:var(--accent);font-size:13px;font-weight:700;margin-top:6px}
+@media(max-width:430px){.hands-stage{gap:10px}.palm{transform:scale(.85) rotate(-5deg);transform-origin:bottom center;margin:0 -8px}.right-hand .palm{transform:scaleX(-1) scale(.85) rotate(-5deg)}.hand-unit{min-width:108px}}
