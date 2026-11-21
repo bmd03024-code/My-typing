@@ -87,3 +87,19 @@ body::after{
 @keyframes balloonPop{to{transform:scale(1.8);opacity:0;filter:blur(5px)}}
 
 .profile-preview{width:104px;height:104px;border-radius:50%;margin:12px auto 18px;background:var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:48px}.profile-preview img{width:100%;height:100%;object-fit:cover}.profile-note{font-size:13px;color:var(--muted)}#profileDialog{width:min(420px,94vw)}
+
+/* Multi-car race: rival cars keep moving while the learner's car accelerates with typing progress */
+.race-track{height:132px;overflow:hidden;background:repeating-linear-gradient(180deg,transparent 0 31px,rgba(120,150,170,.12) 31px 34px)}
+.race-car{z-index:4;bottom:2px;font-size:43px;transition:left .12s linear,filter .12s linear;filter:drop-shadow(0 0 5px #69e2c1)}
+.race-opponent{position:absolute;left:-8%;font-size:31px;z-index:2;white-space:nowrap;animation:opponentRace 5.5s linear infinite}
+.opponent-one{top:3px;animation-duration:5.8s}
+.opponent-two{top:39px;animation-duration:4.6s;animation-delay:-2.1s}
+.opponent-three{top:72px;animation-duration:6.4s;animation-delay:-4s}
+@keyframes opponentRace{from{left:-10%}to{left:105%}}
+.race-car{animation:playerEngine var(--car-speed,1s) ease-in-out infinite alternate}
+@keyframes playerEngine{from{transform:translateX(-50%) translateY(0) scale(1)}to{transform:translateX(-50%) translateY(-2px) scale(1.08)}}
+
+/* Balloons visibly descend from the top of the sky panel */
+.balloon-field{min-height:210px;align-items:flex-start;background:linear-gradient(180deg,#102b50,#1b4260 72%,#244c5e)}
+.balloon{animation:balloonFall 3.2s ease-in-out infinite alternate}
+@keyframes balloonFall{from{transform:translateY(-18px)}to{transform:translateY(105px)}}
