@@ -105,7 +105,7 @@ function renderKeyboard(){
   $('keyboard').innerHTML=['Q W E R T Y U I O P','A S D F G H J K L ;','Z X C V B N M'].map(r=>'<div class="key-row">'+r.split(' ').map(k=>'<span class="key">'+k+'</span>').join('')+'</div>').join('');
  }
 }
-function units(value){return typeof Intl!=='undefined'&&Intl.Segmenter?[...new Intl.Segmenter('bn',{granularity:'grapheme'}).segment(value)].map(x=>x.segment):Array.from(value)}
+function units(value){if(typeof Intl!=='undefined'&&Intl.Segmenter)return [...new Intl.Segmenter('bn',{granularity:'grapheme'}).segment(value)].map(x=>x.segment);return value.match(/\P{M}\p{M}*(?:্[‌‍]?\P{M}\p{M}*)*/gu)||[]}
 function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}function target(){
  if(!run)return;
  let v=units($('typing').value||''),txt=units(run.txt),kind=run.ph==='game'?game:'practice';
@@ -149,7 +149,7 @@ const bijoy={
  KeyQ:['ঙ','ং'],KeyW:['য','য়'],KeyE:['ড','ঢ'],KeyR:['প','ফ'],KeyT:['ট','ঠ'],KeyY:['চ','ছ'],KeyU:['জ','ঝ'],KeyI:['হ','ঞ'],KeyO:['গ','ঘ'],KeyP:['ড়','ঢ়'],
  KeyA:['ৃ','র্'],KeyS:['ু','ূ'],KeyD:['ি','ী'],KeyF:['া','অ'],KeyG:['্','।'],KeyH:['ব','ভ'],KeyJ:['ক','খ'],KeyK:['ত','থ'],KeyL:['দ','ধ'],
  KeyZ:['্র','্য'],KeyX:['ও','ৗ'],KeyC:['ে','ৈ'],KeyV:['র','ল'],KeyB:['ন','ণ'],KeyN:['স','ষ'],KeyM:['ম','শ'],
- Backslash:['ৎ','ঃ'],Digit0:['০',')'],Digit1:['১','!'],Digit2:['২','ঁ'],Digit3:['৩','#'],Digit4:['৪','৳'],Digit5:['৫','%'],Digit6:['৬','ঃ'],Digit7:['৭','ঁ'],Digit8:['৮','*'],Digit9:['৯','(']
+ Backslash:['ৎ','ঃ'],Digit0:['০',')'],Digit1:['১','!'],Digit2:['২','ঁ'],Digit3:['৩','#'],Digit4:['৪','৳'],Digit5:['৫','%'],Digit6:['৬','ঃ'],Digit7:['৭','ৎ'],Digit8:['৮','*'],Digit9:['৯','(']
 };
 const independent={KeyA:'ঋ',KeyS:'উ',KeyD:'ই',KeyF:'আ',KeyC:'এ'};
 const prebaseSigns={KeyD:['ি','ী'],KeyC:['ে','ৈ']};
@@ -163,7 +163,7 @@ $('typing').addEventListener('keydown',e=>{
  e.preventDefault();
  let out=pair[e.shiftKey?1:0];
  if(run.pendingG){
-  const independentVowel=(!e.shiftKey&&independent[e.code])||(e.shiftKey&&e.code==='KeyD'?'ঈ':e.shiftKey&&e.code==='KeyS'?'ঊ':e.shiftKey&&e.code==='KeyC'?'ঐ':e.shiftKey&&e.code==='KeyX'?'ঔ':null);
+  const independentVowel=(!e.shiftKey&&independent[e.code])||(e.shiftKey&&e.code==='KeyA'?'র্':e.shiftKey&&e.code==='KeyD'?'ঈ':e.shiftKey&&e.code==='KeyS'?'ঊ':e.shiftKey&&e.code==='KeyF'?'অ':e.shiftKey&&e.code==='KeyC'?'ঐ':e.shiftKey&&e.code==='KeyX'?'ঔ':null);
   if(independentVowel)out=independentVowel;
   else if(e.code==='KeyA'&&e.shiftKey)out='র্';
   else out='্'+out;
