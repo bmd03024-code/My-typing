@@ -119,7 +119,7 @@ function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}functio
  let v=units($('typing').value||''),txt=units(run.txt),kind=run.ph==='game'?game:'practice';
  const glyph=kind==='rain'?'☄':kind==='race'?'🚗':kind==='bubble'?'🫧':'';
  const name=kind==='rain'?'WORD RAIN':kind==='race'?'TURBO RACE':kind==='bubble'?'BUBBLE POP':'PRACTICE';
- $('target').innerHTML='<small>'+name+' · Round '+(run.round+1)+'</small><div class="game-stage '+kind+'">'+(glyph?'<span class="game-glyph">'+glyph+'</span>':'')+'<div class="game-word">'+[...txt].map((ch,i)=>'<span class="'+(i<v.length?(v[i]===ch?'ok':'err'):(i===v.length?'nextchar':''))+'">'+esc(ch)+'</span>').join('')+'</div></div>';
+ $('target').innerHTML='<small>'+name+' · Round '+(run.round+1)+'</small><div class="game-stage '+kind+'">'+(glyph?'<span class="game-glyph">'+glyph+'</span>':'')+'<div class="game-word">'+txt.map((ch,i)=>'<span class="'+(i<v.length?(v[i]===ch?'ok':'err'):(i===v.length?'nextchar':''))+'">'+esc(ch)+'</span>').join('')+'</div></div>';
 }function esc(c){return c.replace(/[&<>]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[x]))}function metrics(){
  let m=Math.max(1/60,run.activeMs/60000),typed=run.totalTyped+run.typed,correct=run.totalCorrect+run.correct,errors=run.totalErrors+run.errors,acc=typed?Math.round(correct/typed*100):100,speed=run.t==='en'?Math.round(correct/5/m):Math.round(correct/m),unit=run.t==='en'?'WPM':'CPM';
  $('metrics').textContent=speed+' '+unit+' · '+acc+'% accuracy · '+errors+' errors';
