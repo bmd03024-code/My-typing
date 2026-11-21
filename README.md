@@ -27,7 +27,7 @@ Open `index.html` in a modern browser. Progress and settings are stored in that 
 
 ## Important limitations
 
-- The Bengali mapping is an educational UniBijoy-style Unicode implementation, not a licensed Bijoy software engine. Bijoy releases and keyboard variants can differ; verify against the layout used by the learner or exam center.
+- The Bengali mapping uses the publicly documented UniBijoy Unicode normal/Shift key chart (Q=ঙ, Shift+Q=ং; G=হসন্ত, Shift+G=দাঁড়ি). This is an educational Unicode layout, not the proprietary Bijoy Classic/SutonnyMJ ANSI engine. Bijoy product versions and ANSI/Unicode workflows can differ; learners should use the same layout as their exam center. References: https://unibijoy.com/keyboard.html and https://typing.bd/guide/bijoy-keyboard.
 - The three game modes are lightweight typing mini-games with animated feedback and scoring, not full arcade games.
 - Progress, admin credentials and curriculum are stored client-side. The admin password is not secure authentication and can be inspected or changed by anyone with browser access.
 - No real browser automation or physical-keyboard end-to-end test has yet been run. Static checks verify syntax and selected wiring only; do not treat them as proof of 100% functionality.
