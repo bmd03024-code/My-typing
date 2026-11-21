@@ -78,7 +78,7 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
  const source=day[ph]||day.learn;
  const pool=source.split(/(?<=[.!?।;])\s+/).filter(Boolean);
  const words=source.split(/\s+/).filter(Boolean);
- run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],goalWords:Math.max(50,words.length),completedWords:0,promptWords:0,round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,manualPaused:false,done:false,lastInputAt:0,lastTickAt:0,lastNudgeAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
+ run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],goalWords:Math.max(1,words.length),completedWords:0,promptWords:0,round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,manualPaused:false,done:false,lastInputAt:0,lastTickAt:0,lastNudgeAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
  choosePrompt();
  $('lesson').classList.remove('hide');
  $('trackName').textContent=t==='en'?'ENGLISH QWERTY':'বাংলা UniBijoy Unicode';
