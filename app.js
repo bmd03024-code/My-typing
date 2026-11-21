@@ -78,7 +78,7 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
  const source=day[ph]||day.learn;
  const pool=source.split(/(?<=[.!?।;])\s+/).filter(Boolean);
  const words=source.split(/\s+/).filter(Boolean);
- run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,manualPaused:false,done:false,lastInputAt:0,lastTickAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
+ run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,manualPaused:false,done:false,lastInputAt:0,lastTickAt:0,lastNudgeAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
  choosePrompt();
  $('lesson').classList.remove('hide');
  $('trackName').textContent=t==='en'?'ENGLISH QWERTY':'বাংলা UniBijoy Unicode';
@@ -134,6 +134,10 @@ function start(){
   if(!run?.started||run.done)return;
   const now=Date.now(),dt=Math.max(0,Math.min(1000,now-run.lastTickAt));
   run.lastTickAt=now;
+  if(run.lastInputAt&&now-run.lastInputAt>=30000&&(!run.lastNudgeAt||now-run.lastNudgeAt>=90000)){
+   run.lastNudgeAt=now;
+   speak('অনুশীলন চালিয়ে যেতে প্রস্তুত হলে আবার টাইপ শুরু করুন। তাড়াহুড়ো করবেন না, ধীরে ও নির্ভুলভাবে টাইপ করুন।');
+  }
   if(run.lastInputAt&&now-run.lastInputAt<=4000){
    run.activeMs+=dt;run.active=run.activeMs/1000;run.remaining=Math.max(0,run.remaining-dt/1000);
    $('clock').textContent=fmt(Math.ceil(run.remaining));
@@ -191,7 +195,7 @@ $('typing').addEventListener('input',()=>{
  const now=Date.now();run.lastInputAt=now;if(!run.started&&!run.manualPaused)start();
  const v=$('typing').value,arr=units(v),tar=units(run.txt);
  const oldErrors=run.errors;run.typed=arr.length;run.correct=0;run.errors=0;
- arr.forEach((c,i)=>c===tar[i]?run.correct++:run.errors++);if(run.errors>oldErrors&&now-voiceLastError>5000){voiceLastError=now;speak('একটু ভুল হয়েছে, সমস্যা নেই। ধীরে ধীরে সঠিক অক্ষরটি আবার চেষ্টা করুন।')}if(run.correct>0&&run.correct%12===0&&run.correct!==voiceLastPraise&&now-voiceLastError>2500){voiceLastPraise=run.correct;speak('খুব ভালো! এভাবেই মনোযোগ ধরে রাখুন।')}
+ arr.forEach((c,i)=>c===tar[i]?run.correct++:run.errors++);if(run.errors>oldErrors&&now-voiceLastError>5000){voiceLastError=now;speak('শেষ অক্ষরটি মেলেনি। সমস্যা নেই—পর্দায় দেখানো পরের অক্ষরটি দেখে ধীরে আবার চেষ্টা করুন।')}if(run.correct>0&&run.correct%12===0&&run.correct!==voiceLastPraise&&now-voiceLastError>2500){voiceLastPraise=run.correct;speak('খুব ভালো! এভাবেই মনোযোগ ধরে রাখুন।')}
  target();metrics();
  if(arr.length>=tar.length){
   if(arr.join('')===tar.join('')){
