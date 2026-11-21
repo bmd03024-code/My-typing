@@ -135,7 +135,7 @@ function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}functio
  const glyph=kind==='rain'?'☄':kind==='race'?'🚗':kind==='bubble'?'🫧':kind==='monkey'?'🐒':'';
  const name=kind==='rain'?'WORD RAIN':kind==='race'?'TURBO RACE':kind==='bubble'?'BUBBLE POP':kind==='monkey'?'MONKEY TREE CLIMB':'PRACTICE';
  run.promptWords=run.txt.trim().split(/\\s+/).filter(Boolean).length;
- const climb=Math.min(15,run.completedWords+run.promptWords);
+ const climb=Math.min(15,run.completedWords);
  const tree=kind==='monkey'?'<div class="monkey-tree" aria-label="বানরের গাছে ওঠার অগ্রগতি"><div class="tree-trunk"></div>'+Array.from({length:15},(_,i)=>'<div class="tree-branch branch-'+i+' '+(i<climb?'branch-done':'')+'"></div>').join('')+'<span class="tree-monkey" style="bottom:'+(12+climb*4.2)+'%;">🐒</span><span class="tree-top">🏁</span></div><small class="climb-count">ডাল: '+climb+' / ১৫</small>':'';
  $('target').innerHTML='<small>লক্ষ্য: '+run.completedWords+' / '+run.goalWords+' শব্দ · '+name+' · Round '+(run.round+1)+'</small>'+(tree?tree:'')+'<div class="game-stage '+kind+'">'+(glyph?'<span class="game-glyph">'+glyph+'</span>':'')+'<div class="game-word">'+txt.map((ch,i)=>'<span class="'+(i<v.length?(v[i]===ch?'ok':'err'):(i===v.length?'nextchar':''))+'">'+esc(ch)+'</span>').join('')+'</div></div>';highlightKey();
 }function esc(c){return c.replace(/[&<>]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[x]))}function metrics(){
