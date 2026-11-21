@@ -21,6 +21,7 @@ assert.ok(app.includes('if(!run.started&&!run.manualPaused)start()'), 'manual pa
 assert.ok(app.includes("bindBijoy(inp,()=>lang==='bn')"), 'Bangla final exam must use Bijoy input mapping');
 assert.ok(app.includes("KeyQ:['ঙ','ং']") && app.includes("KeyA:['ৃ','র্']") && app.includes("KeyZ:['্র','্য']"), 'core Bijoy normal/shift keys must match the documented chart');
 assert.ok(app.includes('Intl.Segmenter'), 'grapheme-aware counting must be enabled where supported');
+assert.ok(app.includes('txt.map((ch,i)=>'), 'typing target must render grapheme clusters consistently with Bengali character counting');
 assert.ok(css.includes('.key-row'), 'physical keyboard rows must have layout styling');
 
 console.log('My Typing static smoke checks passed.');
