@@ -55,7 +55,7 @@ get('start').click();
 get('pause').click();
 get('typing').value='a';
 get('typing').dispatchEvent(new FakeEvent('input'));
-assert.equal(get('clock').textContent,'15:00','typing after manual Pause must not consume time');
+assert.equal(get('clock').textContent,'0:00','elapsed practice clock must start at zero and remain paused after manual Pause');
 
 // Admin tools can simulate progress and preview the locked Bangla track.
 get('adminOpen').click();
