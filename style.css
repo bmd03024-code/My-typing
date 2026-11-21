@@ -15,3 +15,11 @@
 
 /* Learning-only full keyboard guidance */
 #keyboard.hide{display:none!important}.key-row{display:flex;justify-content:center;gap:5px;margin:5px 0}.key-row .key{min-width:clamp(25px,5vw,48px);min-height:42px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:4px}.key-row .key small{font-size:10px;color:var(--muted)}.key-row .wide-key{min-width:48%;font-weight:700}.key-row .key-active{background:#f4d35e;color:#172338;border:2px solid #e4a11b;box-shadow:0 0 0 3px #f4d35e55;transform:translateY(-2px)}
+
+/* Learning keyboard: hand cue and lesson clock */
+.keyboard-guide{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 12px;padding:10px 13px;border:1px solid var(--accent);border-radius:12px;background:rgba(105,226,193,.08);font-size:14px}
+.keyboard-guide strong{font-variant-numeric:tabular-nums;color:var(--accent);white-space:nowrap}
+.finger-guide{display:flex;align-items:center;justify-content:center;gap:12px;min-height:66px;margin:12px auto 2px;color:var(--muted)}
+.finger-palm{display:inline-block;font-size:40px;transform-origin:50% 85%;animation:fingerPress 1.15s ease-in-out infinite}
+.finger-label{font-size:13px}
+@keyframes fingerPress{0%,100%{transform:translateY(0) rotate(-7deg)}45%{transform:translateY(-7px) rotate(2deg)}65%{transform:translateY(1px) scale(.96)}}
