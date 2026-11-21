@@ -70,7 +70,7 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
  const source=day[ph]||day.learn;
  const pool=source.split(/(?<=[.!?।;])\s+/).filter(Boolean);
  const words=source.split(/\s+/).filter(Boolean);
- run={t,d,ph,source,pool:pool.length?pool:[source],words:words.length?words:[source],round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,active:0,activeMs:0,started:false,done:false,lastInputAt:0,lastTickAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
+ run={t,d,ph,source,pool:pool.length?pool:[source],words:words.length?words:[source],round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,done:false,lastInputAt:0,lastTickAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
  choosePrompt();
  $('lesson').classList.remove('hide');
  $('trackName').textContent=t==='en'?'ENGLISH QWERTY':'বাংলা Bijoy-style Unicode';
@@ -107,9 +107,9 @@ function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}functio
  let v=units($('typing').value||''),txt=units(run.txt);
  $('target').innerHTML='<small>'+ (run.ph==='game'?(game==='rain'?'☄ WORD RAIN':game==='race'?'🚗 TURBO RACE':'🫧 BUBBLE POP'):'PRACTICE')+' · Round '+(run.round+1)+'</small><br>'+[...txt].map((c,i)=>'<span class="'+(i<v.length?(v[i]===c?'ok':'err'):(i===v.length?'nextchar':''))+'">'+esc(c)+'</span>').join('');
 }function esc(c){return c.replace(/[&<>]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[x]))}function metrics(){
- let m=Math.max(1/60,run.activeMs/60000),acc=run.typed?Math.round(run.correct/run.typed*100):100,speed=run.t==='en'?Math.round(run.correct/5/m):Math.round(run.correct/m),unit=run.t==='en'?'WPM':'CPM';
- $('metrics').textContent=speed+' '+unit+' · '+acc+'% accuracy · '+run.errors+' errors';
- return{wpm:speed,acc,unit};
+ let m=Math.max(1/60,run.activeMs/60000),typed=run.totalTyped+run.typed,correct=run.totalCorrect+run.correct,errors=run.totalErrors+run.errors,acc=typed?Math.round(correct/typed*100):100,speed=run.t==='en'?Math.round(correct/5/m):Math.round(correct/m),unit=run.t==='en'?'WPM':'CPM';
+ $('metrics').textContent=speed+' '+unit+' · '+acc+'% accuracy · '+errors+' errors';
+ return{wpm:speed,acc,unit,typed,correct,errors};
 }
 function start(){
  if(!run||run.done)return;
@@ -128,7 +128,7 @@ function start(){
   }
  },250);
 }
-function pause(){if(run)run.started=false}function finish(){if(!run||run.done)return;run.done=true;pause();clearInterval(tick);let m=metrics(),p=S.progress[run.t][run.d]||{};p[run.ph]=true;p[run.ph+'Stats']=m;S.progress[run.t][run.d]=p;S.best[run.t]=Math.max(S.best[run.t]||0,run.t==='en'?m.wpm:Math.round(run.correct/Math.max(1,run.active/60)));$('message').textContent=run.ph==='learn'?'Learn সম্পন্ন। Game ধাপে যান।':'আজকের Game phase সম্পন্ন।';$('next').disabled=false;$('next').textContent=run.ph==='learn'?'Game শুরু':'পরের দিন';save()}function next(){if(!run)return;let {t,d,ph}=run;if(ph==='learn')open(t,d,'game');else if(d<30)open(t,d+1);else{$('lesson').classList.add('hide');alert(t==='en'?'English সম্পন্ন। বাংলা track unlock হয়েছে।':'দুই track সম্পন্ন। Grand Final প্রস্তুত।');render()}}function play(){
+function pause(){if(run)run.started=false}function finish(){if(!run||run.done)return;run.done=true;pause();clearInterval(tick);let m=metrics(),p=S.progress[run.t][run.d]||{};p[run.ph]=true;p[run.ph+'Stats']=m;S.progress[run.t][run.d]=p;S.best[run.t]=Math.max(S.best[run.t]||0,m.wpm);$('message').textContent=run.ph==='learn'?'Learn সম্পন্ন। Game ধাপে যান।':'আজকের Game phase সম্পন্ন।';$('next').disabled=false;$('next').textContent=run.ph==='learn'?'Game শুরু':'পরের দিন';save()}function next(){if(!run)return;let {t,d,ph}=run;if(ph==='learn')open(t,d,'game');else if(d<30)open(t,d+1);else{$('lesson').classList.add('hide');alert(t==='en'?'English সম্পন্ন। বাংলা track unlock হয়েছে।':'দুই track সম্পন্ন। Grand Final প্রস্তুত।');render()}}function play(){
  if(!run)return;
  const bonus=Math.max(5,Math.round(metrics().wpm/2));
  run.score+=bonus;run.rounds++;
@@ -136,6 +136,7 @@ function pause(){if(run)run.started=false}function finish(){if(!run||run.done)re
  $('gameInfo').textContent=label+' · Round '+run.rounds+' · Score '+run.score;
 }
 function completePrompt(){
+ run.totalTyped+=run.typed;run.totalCorrect+=run.correct;run.totalErrors+=run.errors;
  run.round++;choosePrompt();$('typing').value='';run.typed=0;run.correct=0;run.errors=0;target();metrics();
 }
 const bijoy={
