@@ -112,3 +112,6 @@ body::after{
 .game-day small{font-size:11px;color:var(--muted);font-weight:600}
 .game-day-done{border-color:var(--accent)}
 .muted{color:var(--muted);font-size:13px}
+
+/* Completed daily records are keyboard-accessible replay links. */
+.record-open{background:transparent;color:var(--accent);text-align:left;width:100%;font:inherit;cursor:pointer}.record-open:hover{background:var(--line)}
