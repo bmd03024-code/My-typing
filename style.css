@@ -47,7 +47,7 @@
 
 /* Owner watermark: visible across every app screen without blocking interaction */
 body::after{
- content:"Borhan Uddin Mohimi";
+ content:"Borhan Uddin Mohim";
  position:fixed;
  left:50%;
  top:50%;
