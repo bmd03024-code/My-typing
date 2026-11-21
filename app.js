@@ -108,17 +108,28 @@ function choosePrompt(){
 function renderKeyboard(){
  const enRows=[['1','2','3','4','5','6','7','8','9','0'],['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L',';'],['Z','X','C','V','B','N','M',',','.','/']];
  const bnMap={Q:['ঙ','ং'],W:['য','য়'],E:['ড','ঢ'],R:['প','ফ'],T:['ট','ঠ'],Y:['চ','ছ'],U:['জ','ঝ'],I:['হ','ঞ'],O:['গ','ঘ'],P:['ড়','ঢ়'],A:['ৃ','র্'],S:['ু','ূ'],D:['ি','ী'],F:['া','অ'],G:['্','।'],H:['ব','ভ'],J:['ক','খ'],K:['ত','থ'],L:['দ','ধ'],Z:['্র','্য'],X:['ও','ৗ'],C:['ে','ৈ'],V:['র','ল'],B:['ন','ণ'],N:['স','ষ'],M:['ম','শ']};
- $('keyboard').innerHTML='<div class="keyboard-guide"><span>👆 আঙুলের অবস্থান অনুসরণ করুন</span><strong id="keyboardClock">সময় 0:00</strong></div>'+enRows.map((row,ri)=>'<div class="key-row">'+row.map(k=>'<span class="key" data-key="'+k+'" data-output="'+(bnMap[k]||[]).join('')+'"><b>'+k+'</b>'+(run.t==='bn'?'<small>'+(bnMap[k]||['','']).join(' / ')+'</small>':'')+'</span>').join('')+'</div>').join('')+'<div class="key-row"><span class="key wide-key" data-key="SPACE" data-output=" ">SPACE / স্পেস</span></div><div class="finger-guide" aria-hidden="true"><span class="finger-palm">✋</span><span class="finger-label">পরবর্তী কী-তে আঙুল রাখুন</span></div>';
+ $('keyboard').innerHTML='<div class="keyboard-guide"><span>👆 আঙুলের অবস্থান অনুসরণ করুন</span><strong id="keyboardClock">সময় 0:00</strong></div>'+enRows.map((row,ri)=>'<div class="key-row">'+row.map(k=>'<span class="key" data-key="'+k+'" data-output="'+(bnMap[k]||[]).join('')+'"><b>'+k+'</b>'+(run.t==='bn'?'<small>'+(bnMap[k]||['','']).join(' / ')+'</small>':'')+'</span>').join('')+'</div>').join('')+'<div class="key-row"><span class="key wide-key" data-key="SPACE" data-output=" ">SPACE / স্পেস</span></div><div class="hands-stage" aria-label="দুই হাতের আঙুলের নির্দেশনা"><div class="hand-unit left-hand"><div class="hand-label">বাম হাত</div><div class="palm"><i class="finger f-pinky" data-finger="LP"></i><i class="finger f-ring" data-finger="LR"></i><i class="finger f-middle" data-finger="LM"></i><i class="finger f-index" data-finger="LI"></i><i class="finger f-thumb" data-finger="LT"></i></div></div><div class="hand-unit right-hand"><div class="hand-label">ডান হাত</div><div class="palm"><i class="finger f-index" data-finger="RI"></i><i class="finger f-middle" data-finger="RM"></i><i class="finger f-ring" data-finger="RR"></i><i class="finger f-pinky" data-finger="RP"></i><i class="finger f-thumb" data-finger="RT"></i></div></div><div class="finger-label" id="fingerLabel">পরবর্তী অক্ষরের জন্য সঠিক আঙুল দেখানো হবে</div></div>';
  highlightKey();
 }
+function fingerForKey(key){
+ const map={Q:'LP',A:'LP',Z:'LP',1:'LP',W:'LR',S:'LR',X:'LR',2:'LR',E:'LM',D:'LM',C:'LM',3:'LM',R:'LI',F:'LI',V:'LI',T:'LI',G:'LI',B:'LI',4:'LI',5:'LI',Y:'RI',H:'RI',N:'RI',U:'RI',J:'RI',M:'RI',6:'RI',7:'RI',I:'RM',K:'RM',',':'RM',8:'RM',O:'RR',L:'RR','.':'RR',9:'RR',P:'RP',';':'RP','/':'RP',0:'RP',SPACE:'LT'};
+ return map[key]||'RI';
+}
 function highlightKey(){
- const keys=$('keyboard').querySelectorAll?.('.key')||[];keys.forEach(k=>k.classList.remove('key-active'));
+ const keys=[...($('keyboard').querySelectorAll?.('.key')||[])];keys.forEach(k=>k.classList.remove('key-active'));
+ const fingers=[...($('keyboard').querySelectorAll?.('[data-finger]')||[])];fingers.forEach(f=>f.classList.remove('finger-active'));
  if(!run||run.ph!=='learn')return;
  const expected=units(run.txt)[units($('typing').value||'').length];if(!expected)return;
  let hit;
- if(run.t==='en')hit=[...keys].find(k=>k.dataset.key===expected.toUpperCase()||k.dataset.key===expected);
- else hit=[...keys].find(k=>(k.dataset.output||'').includes(expected));
- if(hit)hit.classList.add('key-active');
+ if(run.t==='en')hit=keys.find(k=>k.dataset.key===expected.toUpperCase()||k.dataset.key===expected);
+ else hit=keys.find(k=>(k.dataset.output||'').includes(expected));
+ if(hit){
+  hit.classList.add('key-active');
+  const finger=fingerForKey(hit.dataset.key),active=$('keyboard').querySelector('[data-finger="'+finger+'"]');
+  if(active)active.classList.add('finger-active');
+  const label=$('fingerLabel');
+  if(label)label.textContent=({LP:'বাম হাতের কনিষ্ঠা',LR:'বাম হাতের অনামিকা',LM:'বাম হাতের মধ্যমা',LI:'বাম হাতের তর্জনী',LT:'বাম হাতের বুড়ো আঙুল',RI:'ডান হাতের তর্জনী',RM:'ডান হাতের মধ্যমা',RR:'ডান হাতের অনামিকা',RP:'ডান হাতের কনিষ্ঠা',RT:'ডান হাতের বুড়ো আঙুল'})[finger]+' দিয়ে '+expected+' চাপুন';
+ }
 }
 function units(value){if(typeof Intl!=='undefined'&&Intl.Segmenter)return [...new Intl.Segmenter('bn',{granularity:'grapheme'}).segment(value)].map(x=>x.segment);const out=[];for(const ch of Array.from(value)){if(!out.length){out.push(ch);continue;}const last=out.length-1;if(/\p{M}/u.test(ch)||ch==='\u200c'||ch==='\u200d'||/্[‌‍]?$/.test(out[last]))out[last]+=ch;else out.push(ch);}return out}
 function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}function target(){
