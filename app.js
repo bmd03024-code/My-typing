@@ -70,7 +70,7 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
  const source=day[ph]||day.learn;
  const pool=source.split(/(?<=[.!?।;])\s+/).filter(Boolean);
  const words=source.split(/\s+/).filter(Boolean);
- run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,done:false,lastInputAt:0,lastTickAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
+ run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,manualPaused:false,done:false,lastInputAt:0,lastTickAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false};
  choosePrompt();
  $('lesson').classList.remove('hide');
  $('trackName').textContent=t==='en'?'ENGLISH QWERTY':'বাংলা Bijoy-style Unicode';
@@ -99,8 +99,8 @@ function choosePrompt(){
 }
 function renderKeyboard(){
  if(run?.t==='bn'){
-  const rows=[['Q','ঙ','ং'],['W','য','য়'],['E','ড','ঢ'],['R','প','ফ'],['T','ট','ঠ'],['Y','চ','ছ'],['U','জ','ঝ'],['I','হ','ঞ'],['O','গ','ঘ'],['P','ড়','ঢ়'],['A','ৃ','র্'],['S','ু','ূ'],['D','ি','ী'],['F','া','অ'],['G','লিংক','।'],['H','ব','ভ'],['J','ক','খ'],['K','ত','থ'],['L','দ','ধ'],['Z','্র','্য'],['X','ও','ৗ'],['C','ে','ৈ'],['V','র','ল'],['B','ন','ণ'],['N','স','ষ'],['M','ম','শ']];
-  $('keyboard').innerHTML=rows.map(r=>'<span class="key"><b>'+r[0]+'</b><small>'+r[1]+' / '+r[2]+'</small></span>').join('');
+  const rows=[[['Q','ঙ','ং'],['W','য','য়'],['E','ড','ঢ'],['R','প','ফ'],['T','ট','ঠ'],['Y','চ','ছ'],['U','জ','ঝ'],['I','হ','ঞ'],['O','গ','ঘ'],['P','ড়','ঢ়']],[['A','ৃ','র্'],['S','ু','ূ'],['D','ি','ী'],['F','া','অ'],['G','লিংক','।'],['H','ব','ভ'],['J','ক','খ'],['K','ত','থ'],['L','দ','ধ']],[['Z','্র','্য'],['X','ও','ৗ'],['C','ে','ৈ'],['V','র','ল'],['B','ন','ণ'],['N','স','ষ'],['M','ম','শ']]];
+  $('keyboard').innerHTML=rows.map(row=>'<div class="key-row">'+row.map(r=>'<span class="key"><b>'+r[0]+'</b><small>'+r[1]+' / '+r[2]+'</small></span>').join('')+'</div>').join('');
  }else{
   $('keyboard').innerHTML=['Q W E R T Y U I O P','A S D F G H J K L ;','Z X C V B N M'].map(r=>'<div class="key-row">'+r.split(' ').map(k=>'<span class="key">'+k+'</span>').join('')+'</div>').join('');
  }
@@ -120,7 +120,7 @@ function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}functio
 function start(){
  if(!run||run.done)return;
  if(run.started)return;
- run.started=true;run.lastTickAt=Date.now();
+ run.manualPaused=false;run.started=true;run.lastTickAt=Date.now();
  clearInterval(tick);
  tick=setInterval(()=>{
   if(!run?.started||run.done)return;
@@ -134,7 +134,7 @@ function start(){
   }
  },250);
 }
-function pause(){if(run)run.started=false}function finish(){if(!run||run.done)return;run.done=true;pause();clearInterval(tick);let m=metrics(),p=S.progress[run.t][run.d]||{};p[run.ph]=true;p[run.ph+'Stats']=m;S.progress[run.t][run.d]=p;S.best[run.t]=Math.max(S.best[run.t]||0,m.wpm);$('message').textContent=run.ph==='learn'?'Learn সম্পন্ন। Game ধাপে যান।':'আজকের Game phase সম্পন্ন।';$('next').disabled=false;$('next').textContent=run.ph==='learn'?'Game শুরু':'পরের দিন';save()}function next(){if(!run)return;let {t,d,ph}=run;if(ph==='learn')open(t,d,'game');else if(d<30)open(t,d+1);else{$('lesson').classList.add('hide');alert(t==='en'?'English সম্পন্ন। বাংলা track unlock হয়েছে।':'দুই track সম্পন্ন। Grand Final প্রস্তুত।');render()}}function play(){
+function pause(){if(run){run.started=false;run.manualPaused=true}}function finish(){if(!run||run.done)return;run.done=true;pause();clearInterval(tick);let m=metrics(),p=S.progress[run.t][run.d]||{};p[run.ph]=true;p[run.ph+'Stats']=m;S.progress[run.t][run.d]=p;S.best[run.t]=Math.max(S.best[run.t]||0,m.wpm);$('message').textContent=run.ph==='learn'?'Learn সম্পন্ন। Game ধাপে যান।':'আজকের Game phase সম্পন্ন।';$('next').disabled=false;$('next').textContent=run.ph==='learn'?'Game শুরু':'পরের দিন';save()}function next(){if(!run)return;let {t,d,ph}=run;if(ph==='learn')open(t,d,'game');else if(d<30)open(t,d+1);else{$('lesson').classList.add('hide');alert(t==='en'?'English সম্পন্ন। বাংলা track unlock হয়েছে।':'দুই track সম্পন্ন। Grand Final প্রস্তুত।');render()}}function play(){
  if(!run)return;
  const bonus=Math.max(5,Math.round(metrics().wpm/2));
  run.score+=bonus;run.rounds++;
@@ -182,7 +182,7 @@ function insertBangla(value){
 }
 $('typing').addEventListener('input',()=>{
  if(!run||run.done)return;
- const now=Date.now();run.lastInputAt=now;if(!run.started)start();
+ const now=Date.now();run.lastInputAt=now;if(!run.started&&!run.manualPaused)start();
  const v=$('typing').value,arr=units(v),tar=units(run.txt);
  run.typed=arr.length;run.correct=0;run.errors=0;
  arr.forEach((c,i)=>c===tar[i]?run.correct++:run.errors++);
