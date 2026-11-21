@@ -75,7 +75,7 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
 }function cur(){return S.curriculum||{en:days('en'),bn:days('bn')}}function count(t){return Object.values(S.progress[t]).filter(p=>p.learn&&p.game).length}function render(){let a=count('en'),b=count('bn'),n=a+b;$('days').textContent=n+' / 60';$('percent').textContent=Math.round(n/60*100)+'%';$('totalBar').style.width=n/60*100+'%';$('enBar').style.width=a/30*100+'%';$('bnBar').style.width=b/30*100+'%';$('enBest').textContent=S.best.en||0;$('bnBest').textContent=S.best.bn||0;$('bangla').disabled=a<30;$('bangla').textContent=a<30?'লকড':'শুরু করুন';$('final').classList.toggle('hide',!(a===30&&b===30));let h='';for(let t of ['en','bn'])for(let i=1;i<=30;i++){let p=S.progress[t][i];h+='<div class="chip '+(p?.learn&&p?.game?'done':'')+'">'+t.toUpperCase()+' '+i+' · '+(p?.learn&&p?.game?'✓':'বাকি')+'</div>'}$('records').innerHTML=h;document.body.classList.toggle('light',S.theme==='light');$('profileName').value=S.profile.name;$('profileAvatar').src=S.profile.photo;$('profileAvatar').hidden=!S.profile.photo;$('profileAvatarFallback').hidden=!!S.profile.photo;$('profileOpen').textContent=S.profile.name?'👤 '+S.profile.name.split(/\s+/)[0]:'👤 প্রোফাইল'}function first(t){for(let i=1;i<=30;i++)if(!S.progress[t][i]?.learn||!S.progress[t][i]?.game)return i;return 30}function open(t,d=first(t),phase){
  if(t==='bn'&&count('en')<30&&!window.adminPreview)return alert('প্রথমে English track-এর ৩০ দিন শেষ করুন।');
  const day=cur()[t][d-1],p=S.progress[t][d]||{},ph=phase||(!p.learn?'learn':'game');
- const source=day[ph]||day.learn;game=p.gameStage||'race';
+ const source=day[ph]||day.learn;game=p.gameStage&&p.gameStage!=='complete'?p.gameStage:'race';
  const pool=source.split(/(?<=[.!?।;])\s+/).filter(Boolean);
  const words=source.split(/\s+/).filter(Boolean);
  run={t,d,ph,source,pendingVowel:'',pool:pool.length?pool:[source],words:words.length?words:[source],goalWords:Math.max(1,words.length),completedWords:0,promptWords:0,round:0,txt:source,remaining:(ph==='learn'?S.settings.learn:S.settings.game)*60,initial:(ph==='learn'?S.settings.learn:S.settings.game)*60,typed:0,correct:0,errors:0,totalTyped:0,totalCorrect:0,totalErrors:0,active:0,activeMs:0,started:false,manualPaused:false,done:false,lastInputAt:0,lastTickAt:0,lastNudgeAt:0,score:0,rounds:0,stamp:Date.now(),pendingG:false,gameStage:p.gameStage||'race'};
@@ -179,7 +179,7 @@ function completePrompt(){
  run.completedWords=Math.min(run.goalWords,run.completedWords+run.promptWords);
  $('phaseBar').style.width=(run.completedWords/run.goalWords*100)+'%';
  $('target').querySelector('small').textContent='লক্ষ্য: '+run.completedWords+' / '+run.goalWords+' শব্দ';
- if(run.completedWords>=run.goalWords){finish();$('typing').disabled=true;return;}
+ if(run.completedWords>=run.goalWords){finish();if(run.done)$('typing').disabled=true;return;}
  run.round++;choosePrompt();$('typing').value='';run.typed=0;run.correct=0;run.errors=0;target();metrics();
 }
 const bijoy={
