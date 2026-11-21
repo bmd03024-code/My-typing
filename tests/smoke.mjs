@@ -22,6 +22,8 @@ assert.ok(app.includes("bindBijoy(inp,()=>lang==='bn')"), 'Bangla final exam mus
 assert.ok(app.includes("KeyQ:['ঙ','ং']") && app.includes("KeyA:['ৃ','র্']") && app.includes("KeyZ:['্র','্য']"), 'core Bijoy normal/shift keys must match the documented chart');
 assert.ok(app.includes('Intl.Segmenter'), 'grapheme-aware counting must be enabled where supported');
 assert.ok(app.includes('txt.map((ch,i)=>'), 'typing target must render grapheme clusters consistently with Bengali character counting');
+assert.ok(app.includes('lastNudgeAt') && app.includes('>=30000') && app.includes('>=90000'), 'teacher should give sparse inactivity nudges');
+assert.ok(app.includes('শেষ অক্ষরটি মেলেনি'), 'teacher should give actionable typing-error feedback');
 assert.ok(css.includes('.key-row'), 'physical keyboard rows must have layout styling');
 
 console.log('My Typing static smoke checks passed.');
