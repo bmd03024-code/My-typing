@@ -98,9 +98,6 @@ function choosePrompt(){
  if(!run)return;
  if(run.ph==='learn'){
   run.txt=run.pool[run.round%run.pool.length];
- }else if(game==='race'){
-  const n=4,start=(run.round*n)%run.words.length;
-  run.txt=Array.from({length:Math.min(n,run.words.length)},(_,i)=>run.words[(start+i)%run.words.length]).join(' ');
  }else{
   run.txt=run.words[run.round%run.words.length];
  }
@@ -135,9 +132,12 @@ function units(value){if(typeof Intl!=='undefined'&&Intl.Segmenter)return [...ne
 function fmt(n){return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}function target(){
  if(!run)return;
  let v=units($('typing').value||''),txt=units(run.txt),kind=run.ph==='game'?game:'practice';
- const glyph=kind==='rain'?'☄':kind==='race'?'🚗':kind==='bubble'?'🫧':'';
- const name=kind==='rain'?'WORD RAIN':kind==='race'?'TURBO RACE':kind==='bubble'?'BUBBLE POP':'PRACTICE';
- run.promptWords=run.txt.trim().split(/\\s+/).filter(Boolean).length;$('target').innerHTML='<small>লক্ষ্য: '+run.completedWords+' / '+run.goalWords+' শব্দ · '+name+' · Round '+(run.round+1)+'</small><div class="game-stage '+kind+'">'+(glyph?'<span class="game-glyph">'+glyph+'</span>':'')+'<div class="game-word">'+txt.map((ch,i)=>'<span class="'+(i<v.length?(v[i]===ch?'ok':'err'):(i===v.length?'nextchar':''))+'">'+esc(ch)+'</span>').join('')+'</div></div>';highlightKey();
+ const glyph=kind==='rain'?'☄':kind==='race'?'🚗':kind==='bubble'?'🫧':kind==='monkey'?'🐒':'';
+ const name=kind==='rain'?'WORD RAIN':kind==='race'?'TURBO RACE':kind==='bubble'?'BUBBLE POP':kind==='monkey'?'MONKEY TREE CLIMB':'PRACTICE';
+ run.promptWords=run.txt.trim().split(/\\s+/).filter(Boolean).length;
+ const climb=Math.min(15,run.completedWords+run.promptWords);
+ const tree=kind==='monkey'?'<div class="monkey-tree" aria-label="বানরের গাছে ওঠার অগ্রগতি"><div class="tree-trunk"></div>'+Array.from({length:15},(_,i)=>'<div class="tree-branch branch-'+i+' '+(i<climb?'branch-done':'')+'"></div>').join('')+'<span class="tree-monkey" style="bottom:'+(12+climb*4.2)+'%;">🐒</span><span class="tree-top">🏁</span></div><small class="climb-count">ডাল: '+climb+' / ১৫</small>':'';
+ $('target').innerHTML='<small>লক্ষ্য: '+run.completedWords+' / '+run.goalWords+' শব্দ · '+name+' · Round '+(run.round+1)+'</small>'+(tree?tree:'')+'<div class="game-stage '+kind+'">'+(glyph?'<span class="game-glyph">'+glyph+'</span>':'')+'<div class="game-word">'+txt.map((ch,i)=>'<span class="'+(i<v.length?(v[i]===ch?'ok':'err'):(i===v.length?'nextchar':''))+'">'+esc(ch)+'</span>').join('')+'</div></div>';highlightKey();
 }function esc(c){return c.replace(/[&<>]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[x]))}function metrics(){
  let m=Math.max(1/60,run.activeMs/60000),typed=run.totalTyped+run.typed,correct=run.totalCorrect+run.correct,errors=run.totalErrors+run.errors,acc=typed?Math.round(correct/typed*100):100,speed=run.t==='en'?Math.round(correct/5/m):Math.round(correct/m),unit=run.t==='en'?'WPM':'CPM';
  $('metrics').textContent=speed+' '+unit+' · '+acc+'% accuracy · '+errors+' errors';
@@ -166,8 +166,8 @@ function pause(){if(run){run.started=false;run.manualPaused=true;guide('অন�
  if(!run)return;
  const bonus=Math.max(5,Math.round(metrics().wpm/2));
  run.score+=bonus;run.rounds++;
- const label=game==='rain'?'☄ শব্দবৃষ্টি: শব্দটি ধরুন':game==='race'?'🚗 দ্রুতগামী গাড়ি এগিয়েছে':'🫧 বুদবুদ ফেটেছে';
- $('gameInfo').textContent=label+' · Round '+run.rounds+' · Score '+run.score;
+ const label=game==='race'?'🚗 গাড়ি এগিয়েছে':game==='monkey'?'🐒 বানর একটি ডালে উঠেছে':game==='rain'?'☄ শব্দবৃষ্টি: শব্দটি ধরেছেন':'🫧 বুদবুদ ফেটেছে';
+ $('gameInfo').textContent=label+' · '+Math.min(15,run.completedWords+run.promptWords)+' / ১৫ শব্দ · Score '+run.score;
 }
 function completePrompt(){
  if(run.ph==='game')speak(game==='rain'?'দারুণ! শব্দটি ঠিকভাবে টাইপ করেছেন।':'চমৎকার! আপনি এই রাউন্ডটি সম্পন্ন করেছেন।');else speak('খুব ভালো! এই অনুশীলনটি সঠিকভাবে সম্পন্ন করেছেন।');
@@ -224,7 +224,15 @@ $('typing').addEventListener('input',()=>{
   }
  }
 });$('english').onclick=()=>open('en');$('bangla').onclick=()=>open('bn');$('start').onclick=()=>{if(run){start();$('message').textContent='সময় শুধু অনুশীলনের সময় হিসেবে গণনা হবে; লক্ষ্য পূরণ না হওয়া পর্যন্ত পাঠ চলবে।'}};$('pause').onclick=pause;$('next').onclick=next;$('close').onclick=()=>{$('lesson').classList.add('hide');pause();clearInterval(tick)};document.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>{
- game=b.dataset.game;if(run&&run.ph==='game'){run.round=0;run.score=0;choosePrompt();$('typing').value='';run.typed=run.correct=run.errors=0;target();$('gameInfo').textContent=(game==='rain'?'☄ শব্দবৃষ্টি':game==='race'?'🚗 দ্রুতগামী গাড়ি':'🫧 বুদবুদ খেলা')+' চালু হয়েছে।';}
+ game=b.dataset.game;if(run&&run.ph==='game'){
+  run.round=0;run.score=0;run.completedWords=0;run.goalWords=15;
+  const sourceWords=run.source.split(/\\s+/).filter(Boolean);
+  run.words=Array.from({length:15},(_,i)=>sourceWords[i%Math.max(1,sourceWords.length)]||'type');
+  choosePrompt();$('typing').value='';run.typed=run.correct=run.errors=0;target();
+  $('phaseBar').style.width='0%';
+  $('gameInfo').textContent=(game==='race'?'🚗 কার রেস':game==='monkey'?'🐒 বানরের গাছে ওঠা':game==='rain'?'☄ শব্দবৃষ্টি':'🫧 বুদবুদ খেলা')+' শুরু! ১৫টি শব্দ সঠিকভাবে টাইপ করুন।';
+  speak(game==='monkey'?'প্রতিটি শব্দ ঠিকভাবে টাইপ করলে বানর একটি করে ডালে উঠবে। পনেরোটি শব্দ শেষে সে গাছের চূড়ায় পৌঁছাবে।':game==='race'?'প্রতিটি সঠিক শব্দে আপনার গাড়ির গতি বাড়বে। পনেরোটি শব্দ টাইপ করে রেস শেষ করুন।':'প্রতিটি গেমে পনেরোটি শব্দ টাইপ করে লক্ষ্য পূরণ করুন।');
+ }
 });$('theme').onclick=()=>{S.theme=S.theme==='dark'?'light':'dark';save()};$('backup').onclick=()=>download('my-typing-backup.json',JSON.stringify(S,null,2));$('restoreBackup').onclick=()=>$('backupFile').click();$('backupFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(!data||!data.settings||!data.progress||!data.progress.en||!data.progress.bn)throw Error('Backup file format ভুল');if(!confirm('বর্তমান progress ও settings backup দিয়ে প্রতিস্থাপন করবেন?'))return;S=normalizeState(data);save();alert('Backup restore হয়েছে।')}catch(err){alert('Restore হয়নি: '+err.message)}finally{e.target.value=''}};function download(n,c){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([c],{type:'application/json'}));a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}$('adminOpen').onclick=()=>$('admin').showModal();$('loginBtn').onclick=()=>{const enteredUser=$('user').value.trim().toLocaleLowerCase();const savedUser=String(S.settings.user||'').trim().toLocaleLowerCase();const enteredPass=$('pass').value;if(enteredUser===savedUser&&enteredPass===String(S.settings.pass||'')){$('login').classList.add('hide');$('tools').classList.remove('hide')}else alert('Username/password ভুল। Username-এর আগে-পরে অতিরিক্ত space আছে কি না দেখুন; Password হুবহু লিখুন।')};$('preview').onclick=()=>{window.adminPreview=true;try{open($('admTrack').value,Math.max(1,Math.min(30,+$('admDay').value)),$('admPhase').value)}finally{window.adminPreview=false}};$('unlock').onclick=()=>{const t=$('admTrack').value,d=Math.max(1,Math.min(30,+$('admDay').value||1));S.progress[t][d]={...(S.progress[t][d]||{}),learn:true,game:true,adminUnlocked:true};save();alert('নির্বাচিত দিনটি Admin override দিয়ে সম্পন্ন হিসেবে চিহ্নিত হয়েছে।')};$('fast').onclick=()=>{if(run){run.completedWords=run.goalWords;finish()}};$('simulate').onclick=()=>{for(let t of ['en','bn'])for(let d=1;d<=30;d++)S.progress[t][d]={learn:true,game:true,simulated:true};save();alert('Progress simulation complete; Grand Final unlocked.')};$('reset').onclick=()=>{if(confirm('সব progress মুছবেন?')){S.progress={en:{},bn:{}};S.best={en:0,bn:0};save()}};$('settings').onclick=()=>{S.settings.learn=Math.max(1,Math.min(60,+$('learnMin').value||15));S.settings.game=Math.max(1,Math.min(60,+$('gameMin').value||15));S.settings.user=$('newUser').value||S.settings.user;S.settings.pass=$('newPass').value||S.settings.pass;save();alert('Settings saved')};$('exportCurr').onclick=()=>download('my-typing-curriculum.json',JSON.stringify(cur(),null,2));$('importCurr').onclick=()=>{try{let c=JSON.parse($('curriculumJSON').value);if(!Array.isArray(c.en)||c.en.length!==30||!Array.isArray(c.bn)||c.bn.length!==30||!['en','bn'].every(t=>c[t].every(d=>d&&typeof d.title==='string'&&typeof d.learn==='string'&&typeof d.game==='string'&&d.learn.trim()&&d.game.trim())))throw Error('English ও Bangla-তে title, learn, game-সহ ৩০টি বৈধ দিন প্রয়োজন');S.curriculum=c;save();alert('Curriculum imported')}catch(e){alert(e.message)}};$('resetCurr').onclick=()=>{S.curriculum=null;save()};let examTimer=null;function beginExam(){
 clearInterval(examTimer);
 const t=prompt('পরীক্ষার ভাষা লিখুন: en অথবা bn','en');if(!['en','bn'].includes((t||'').toLowerCase()))return;const lang=t.toLowerCase(),passage=lang==='en'?'Typing is a valuable skill for education and work. A careful typist focuses on accuracy before speed. Practice every day, keep a steady rhythm, and use the correct fingers. Digital communication helps people share ideas across the world.': 'বাংলা আমাদের মাতৃভাষা। শুদ্ধভাবে বাংলা টাইপ করা শিক্ষা ও কর্মক্ষেত্রে একটি প্রয়োজনীয় দক্ষতা। নিয়মিত অনুশীলন করলে নির্ভুলতা ও গতি দুটোই বাড়ে। ধৈর্য ধরে সঠিকভাবে লিখতে হবে।';
