@@ -90,7 +90,7 @@ return (t==='en'?en:bn).map((row,i)=>({title:'Day '+(i+1)+' · '+row[0],learn:ro
  $('gameInfo').textContent=ph==='game'?'গেম বেছে নিয়ে শব্দ বা বাক্য টাইপ করুন।':'';if(ph==='game')speak('এবার অনুশীলনের খেলার ধাপ। একটি খেলা বেছে নিন, তারপর পর্দায় দেখানো শব্দ টাইপ করুন।');
  $('next').disabled=true;$('next').textContent='পরের ধাপ';
  target();renderKeyboard();
- $('clock').textContent='0:00';const kc=$('keyboardClock');if(kc)kc.textContent='সময় 0:00';
+ $('clock').textContent='0:00';const kc=$('keyboard').querySelector('.keyboard-clock');if(kc)kc.textContent='সময় 0:00';
  $('phaseBar').style.width='0%';
  $('lesson').scrollIntoView({behavior:'smooth'});
 }
@@ -108,7 +108,7 @@ function choosePrompt(){
 function renderKeyboard(){
  const enRows=[['1','2','3','4','5','6','7','8','9','0'],['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L',';'],['Z','X','C','V','B','N','M',',','.','/']];
  const bnMap={Q:['ঙ','ং'],W:['য','য়'],E:['ড','ঢ'],R:['প','ফ'],T:['ট','ঠ'],Y:['চ','ছ'],U:['জ','ঝ'],I:['হ','ঞ'],O:['গ','ঘ'],P:['ড়','ঢ়'],A:['ৃ','র্'],S:['ু','ূ'],D:['ি','ী'],F:['া','অ'],G:['্','।'],H:['ব','ভ'],J:['ক','খ'],K:['ত','থ'],L:['দ','ধ'],Z:['্র','্য'],X:['ও','ৗ'],C:['ে','ৈ'],V:['র','ল'],B:['ন','ণ'],N:['স','ষ'],M:['ম','শ']};
- $('keyboard').innerHTML='<div class="keyboard-guide"><span>👆 আঙুলের অবস্থান অনুসরণ করুন</span><strong id="keyboardClock">সময় 0:00</strong></div>'+enRows.map((row,ri)=>'<div class="key-row">'+row.map(k=>'<span class="key" data-key="'+k+'" data-output="'+(bnMap[k]||[]).join('')+'"><b>'+k+'</b>'+(run.t==='bn'?'<small>'+(bnMap[k]||['','']).join(' / ')+'</small>':'')+'</span>').join('')+'</div>').join('')+'<div class="key-row"><span class="key wide-key" data-key="SPACE" data-output=" ">SPACE / স্পেস</span></div><div class="hands-stage" aria-label="দুই হাতের আঙুলের নির্দেশনা"><div class="hand-unit left-hand"><div class="hand-label">বাম হাত</div><div class="palm"><i class="finger f-pinky" data-finger="LP"></i><i class="finger f-ring" data-finger="LR"></i><i class="finger f-middle" data-finger="LM"></i><i class="finger f-index" data-finger="LI"></i><i class="finger f-thumb" data-finger="LT"></i></div></div><div class="hand-unit right-hand"><div class="hand-label">ডান হাত</div><div class="palm"><i class="finger f-index" data-finger="RI"></i><i class="finger f-middle" data-finger="RM"></i><i class="finger f-ring" data-finger="RR"></i><i class="finger f-pinky" data-finger="RP"></i><i class="finger f-thumb" data-finger="RT"></i></div></div><div class="finger-label" id="fingerLabel">পরবর্তী অক্ষরের জন্য সঠিক আঙুল দেখানো হবে</div></div>';
+ $('keyboard').innerHTML='<div class="keyboard-guide"><span>👆 আঙুলের অবস্থান অনুসরণ করুন</span><strong class="keyboard-clock">সময় 0:00</strong></div>'+enRows.map((row,ri)=>'<div class="key-row">'+row.map(k=>'<span class="key" data-key="'+k+'" data-output="'+(bnMap[k]||[]).join('')+'"><b>'+k+'</b>'+(run.t==='bn'?'<small>'+(bnMap[k]||['','']).join(' / ')+'</small>':'')+'</span>').join('')+'</div>').join('')+'<div class="key-row"><span class="key wide-key" data-key="SPACE" data-output=" ">SPACE / স্পেস</span></div><div class="hands-stage" aria-label="দুই হাতের আঙুলের নির্দেশনা"><div class="hand-unit left-hand"><div class="hand-label">বাম হাত</div><div class="palm"><i class="finger f-pinky" data-finger="LP"></i><i class="finger f-ring" data-finger="LR"></i><i class="finger f-middle" data-finger="LM"></i><i class="finger f-index" data-finger="LI"></i><i class="finger f-thumb" data-finger="LT"></i></div></div><div class="hand-unit right-hand"><div class="hand-label">ডান হাত</div><div class="palm"><i class="finger f-index" data-finger="RI"></i><i class="finger f-middle" data-finger="RM"></i><i class="finger f-ring" data-finger="RR"></i><i class="finger f-pinky" data-finger="RP"></i><i class="finger f-thumb" data-finger="RT"></i></div></div><div class="finger-label" class="finger-label">পরবর্তী অক্ষরের জন্য সঠিক আঙুল দেখানো হবে</div></div>';
  highlightKey();
 }
 function fingerForKey(key){
@@ -127,7 +127,7 @@ function highlightKey(){
   hit.classList.add('key-active');
   const finger=fingerForKey(hit.dataset.key),active=$('keyboard').querySelector('[data-finger="'+finger+'"]');
   if(active)active.classList.add('finger-active');
-  const label=$('fingerLabel');
+  const label=$('keyboard').querySelector('.finger-label');
   if(label)label.textContent=({LP:'বাম হাতের কনিষ্ঠা',LR:'বাম হাতের অনামিকা',LM:'বাম হাতের মধ্যমা',LI:'বাম হাতের তর্জনী',LT:'বাম হাতের বুড়ো আঙুল',RI:'ডান হাতের তর্জনী',RM:'ডান হাতের মধ্যমা',RR:'ডান হাতের অনামিকা',RP:'ডান হাতের কনিষ্ঠা',RT:'ডান হাতের বুড়ো আঙুল'})[finger]+' দিয়ে '+expected+' চাপুন';
  }
 }
@@ -158,7 +158,7 @@ function start(){
   }
   if(run.lastInputAt&&now-run.lastInputAt<=4000){
    run.activeMs+=dt;run.active=run.activeMs/1000;
-   $('clock').textContent=fmt(Math.floor(run.activeMs/1000));const kc=$('keyboardClock');if(kc)kc.textContent='সময় '+fmt(Math.floor(run.activeMs/1000));
+   $('clock').textContent=fmt(Math.floor(run.activeMs/1000));const kc=$('keyboard').querySelector('.keyboard-clock');if(kc)kc.textContent='সময় '+fmt(Math.floor(run.activeMs/1000));
   }
  },250);
 }
