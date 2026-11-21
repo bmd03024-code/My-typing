@@ -103,3 +103,12 @@ body::after{
 .balloon-field{min-height:210px;align-items:flex-start;background:linear-gradient(180deg,#102b50,#1b4260 72%,#244c5e)}
 .balloon{animation:balloonFall 3.2s ease-in-out infinite alternate}
 @keyframes balloonFall{from{transform:translateY(-18px)}to{transform:translateY(105px)}}
+
+/* Replay any unlocked day from the game library */
+.game-library-track{margin:14px 0}
+.game-library-track h3{margin:8px 0}
+.game-day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:9px}
+.game-day{display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 7px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--fg);font-weight:800}
+.game-day small{font-size:11px;color:var(--muted);font-weight:600}
+.game-day-done{border-color:var(--accent)}
+.muted{color:var(--muted);font-size:13px}
