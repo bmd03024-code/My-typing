@@ -251,3 +251,7 @@ header nav{align-items:center}header nav a{color:var(--muted);text-decoration:no
 .course-back{margin:0 0 14px}
 #legacyTypingCourse{display:none!important}
 @media(max-width:600px){.free-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.free-typing{margin-left:8px;margin-right:8px}.redesigned-home{margin-left:8px;margin-right:8px}}
+
+/* Home actions: reveal course list or free practice only after selection */
+.home-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.secondary-link{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border:1px solid var(--accent);border-radius:10px;background:transparent;color:var(--fg);font:inherit;font-weight:800;text-decoration:none;cursor:pointer}.secondary-link:hover{background:rgba(105,226,193,.12)}#practiceBack,#courseListBack{margin:0 0 16px}
+@media(max-width:430px){.home-actions{align-items:stretch;flex-direction:column}.home-actions a,.home-actions button{width:100%;box-sizing:border-box}}
