@@ -223,3 +223,31 @@ header nav{align-items:center}header nav a{color:var(--muted);text-decoration:no
 .word-demo h4{margin:12px 0 5px}.word-demo p{font-size:13px;line-height:1.65;color:var(--muted);min-height:64px}.word-demo-controls{display:flex;justify-content:space-between;gap:8px}.word-demo-controls button,.word-task button{padding:9px 12px;font-size:12px}.word-task{margin-top:16px;padding:15px;border:1px solid var(--line);border-radius:12px}.word-task p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.6}.word-task button{background:var(--accent);color:#09201b;font-weight:800}
 @media(max-width:760px){.word-learning-grid{grid-template-columns:1fr}.word-page{min-height:480px}.word-toolgroup{border-right:0;border-bottom:1px solid #d4dbe5;width:100%;padding:6px 2px}.word-ribbon{min-height:0}.word-titlebar>span{display:none}}
 @media(max-width:430px){.word-module{padding:10px}.word-tabs{overflow-x:auto}.word-tab{padding:8px 10px}.word-page{padding:24px 16px;min-height:430px;font-size:13px}.word-editor-area{padding:12px 6px}.word-task{align-items:flex-start}.word-task button{width:100%}}
+
+/* Revised course landing page and free typing practice */
+[hidden]{display:none!important}
+.redesigned-home{margin-top:24px;margin-bottom:20px}
+.redesigned-home .home-copy h1{margin-bottom:22px}
+.free-typing{max-width:1000px;margin:0 auto 30px;padding:clamp(18px,3vw,28px);border:1px solid var(--line);border-radius:20px}
+.free-typing-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.free-typing-heading h2{font-size:clamp(24px,4vw,32px);margin:6px 0}
+.free-typing-heading p{color:var(--muted);line-height:1.7;margin:0}
+.free-tag{padding:7px 11px;border-radius:20px;background:#d8f5e8;color:#126b49;font-size:12px;font-weight:800}
+.typing-language{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0 14px}
+.language-choice{padding:10px 16px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font-weight:800;cursor:pointer}
+.language-choice.active{background:var(--accent);border-color:var(--accent);color:#09201b}
+.free-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}
+.free-stats article{padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);display:grid;gap:5px}
+.free-stats small{color:var(--muted);font-size:12px}.free-stats strong{font-size:clamp(18px,3vw,24px);font-variant-numeric:tabular-nums}
+.free-prompt-label,.free-typing-label{display:block;margin:14px 0 7px;font-size:13px;font-weight:800}
+.free-prompt{margin:0;padding:13px;border:1px dashed var(--line);border-radius:10px;line-height:1.9;background:var(--bg)}
+#freeTypingInput{width:100%;box-sizing:border-box;min-height:120px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--fg);font:inherit;line-height:1.8;resize:vertical}
+.free-typing-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.free-typing-actions button,.course-back{padding:10px 14px;border:0;border-radius:9px;background:var(--accent);color:#09201b;font-weight:800;cursor:pointer}
+#freeTypingHint{font-size:12px;color:var(--muted)}
+.course-list-view{max-width:1000px;margin:24px auto}
+.course-list-view .course-card{width:100%;font:inherit;text-align:left;cursor:pointer}
+.course-detail-view{max-width:1100px;margin:22px auto}
+.course-back{margin:0 0 14px}
+#legacyTypingCourse{display:none!important}
+@media(max-width:600px){.free-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.free-typing{margin-left:8px;margin-right:8px}.redesigned-home{margin-left:8px;margin-right:8px}}
