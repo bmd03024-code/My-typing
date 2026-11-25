@@ -360,4 +360,4 @@ if(wordEditor){
  saveWord();showLesson(0);
 }
 
-$('finalBtn').onclick=beginExam;$('voiceToggle').onclick=()=>{S.settings.voiceOn=!S.settings.voiceOn;save();voiceStatus();if(S.settings.voiceOn)speak('বাংলা নির্দেশনা চালু হয়েছে। এখন থেকে আমি আপনাকে ধাপে ধাপে গাইড করব।');else if('speechSynthesis'in window)speechSynthesis.cancel()};render();voiceStatus()})();
+$('finalBtn').onclick=beginExam;$('voiceToggle').onclick=()=>{S.settings.voiceOn=!S.settings.voiceOn;save();voiceStatus();if(S.settings.voiceOn)speak('বাংলা নির্দেশনা চালু হয়েছে। এখন থেকে আমি আপনাকে ধাপে ধাপে গাইড করব।');else if('speechSynthesis'in window)speechSynthesis.cancel()};window.renderTypingDashboard=render;render();voiceStatus()})();
