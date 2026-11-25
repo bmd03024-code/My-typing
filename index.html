@@ -160,7 +160,17 @@
  const showOnly=target=>{[home,practice,list,...Object.values(views)].forEach(el=>{if(el)el.hidden=el!==target});window.scrollTo({top:0,behavior:'smooth'})};
  const hub=$('wordLearningHub'),typingHub=$('legacyTypingCourse'),wordTools=$('word-module');
  const showWordHub=()=>{hub.hidden=false;typingHub.hidden=true;wordTools.hidden=true;window.scrollTo({top:0,behavior:'smooth'})};
- const showTypingDashboard=()=>{hub.hidden=true;wordTools.hidden=true;typingHub.hidden=false;window.scrollTo({top:0,behavior:'smooth'})};
+ const showTypingDashboard=()=>{
+  hub.hidden=true;wordTools.hidden=true;typingHub.hidden=false;
+  // Ensure the two 35-level roadmaps are populated when the dashboard is opened.
+  for(const track of ['en','bn']){
+   const grid=$(track==='en'?'enLevelGrid':'bnLevelGrid');
+   if(grid&&!grid.children.length){
+    grid.innerHTML=Array.from({length:35},(_,i)=>'<button type="button" class="typing-level-button" data-level-track="'+track+'" data-level-day="'+(i+1)+'" '+(i?'disabled':'')+'><strong>Level '+(i+1)+'</strong><small>'+(i?'🔒 লক':'শুরু করুন')+'</small></button>').join('');
+   }
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+ };
  $('openMyTyping').addEventListener('click',showTypingDashboard);
  $('openEnglishTyping').addEventListener('click',()=>{hub.hidden=true;wordTools.hidden=true;typingHub.hidden=false;window.scrollTo({top:0,behavior:'smooth'});$('english').click()});
  $('openBanglaTyping').addEventListener('click',()=>{hub.hidden=true;wordTools.hidden=true;typingHub.hidden=false;window.scrollTo({top:0,behavior:'smooth'});if(!$('bangla').disabled)$('bangla').click();else $('bangla').focus()});
