@@ -384,3 +384,13 @@ header nav{align-items:center}header nav a{color:var(--muted);text-decoration:no
  .home-hero.redesigned-home .hero-lead{font-size:15px;line-height:1.9}
  .home-main-actions{padding:0 8px;box-sizing:border-box}
 }
+
+
+/* Typing course details visible directly in the Word course card */
+.typing-course-summary{width:100%;box-sizing:border-box;margin:10px 0 4px;padding:12px;border:1px solid var(--line);border-radius:11px;background:rgba(105,226,193,.07);white-space:normal}
+.typing-course-summary strong{display:block;margin-bottom:6px;color:var(--fg);font-size:13px}
+.typing-course-summary ul{margin:0 0 7px;padding-left:19px;color:var(--muted);font-size:12px;line-height:1.8}
+.typing-course-summary>span{display:block;color:var(--muted);font-size:11px;line-height:1.6}
+.course-card{align-items:flex-start}
+.course-card .typing-course-summary{text-align:left}
+@media(max-width:600px){.typing-course-summary{padding:10px}.typing-course-summary ul{font-size:11px}}
