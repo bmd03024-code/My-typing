@@ -442,3 +442,18 @@ header nav{align-items:center}header nav a{color:var(--muted);text-decoration:no
 .excel-checkpoint textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--fg)}
 .excel-checkpoint small{display:block;margin-top:8px;color:var(--accent)}
 @media(max-width:760px){.excel-course-layout{grid-template-columns:1fr}.excel-day-list{grid-template-columns:repeat(3,minmax(0,1fr))}.excel-day-button{flex-direction:column;align-items:flex-start}}
+
+
+/* Excel hands-on spreadsheet editor */
+.excel-day-button{cursor:pointer}
+.excel-day-button:disabled{opacity:1;cursor:pointer}
+.excel-grid-scroll{max-width:100%;overflow:auto}
+.excel-practice-sheet{min-width:620px}
+.excel-practice-sheet td[contenteditable="true"]{min-width:82px;cursor:text}
+.excel-practice-sheet td:focus{outline:2px solid var(--accent);outline-offset:-2px;background:rgba(35,170,120,.10)}
+.excel-practice-sheet .excel-cell-selected{box-shadow:inset 0 0 0 2px var(--accent)}
+.excel-formula-bar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.excel-formula-bar strong{min-width:42px;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);text-align:center}
+.excel-formula-bar input{flex:1;min-width:160px;padding:9px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--fg)}
+.excel-formula-bar button,.excel-sheet-actions button{cursor:pointer}
+.excel-sheet-actions button{font-size:12px}
