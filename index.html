@@ -130,7 +130,23 @@
 </section>
 <section id="lesson" class="panel hide"><div class="between"><div><small id="trackName"></small><h2 id="lessonTitle"></h2></div><button id="close">বন্ধ</button></div><p><b id="phase"></b> · সময় <span id="clock">0:00</span> · <span id="metrics">0 WPM · 100% accuracy</span></p><div class="bar"><i id="phaseBar"></i></div><div id="target" class="target"></div><textarea id="typing" rows="3" placeholder="এখানে টাইপ করুন…" spellcheck="false"></textarea><div id="keyboard" class="keyboard"></div><div class="actions"><button id="start">শুরু / পুনরায় শুরু</button><button id="pause">বিরতি</button><button id="voiceToggle" type="button">🔊 ভয়েস চালু</button><button id="next" disabled>পরের ধাপ</button></div><p id="message"></p><div id="games" class="actions hide"><button data-game="race">🚗 গাড়ির রেস</button><button data-game="monkey">🐒 বানরের গাছে ওঠা</button><button data-game="balloon">🎈 বেলুন ফাটাও</button></div><p id="gameInfo"></p></section><section class="panel"><small>UNLOCKED GAME DAYS</small><h2>আনলক করা দিনের গেম</h2><p class="muted">শেখার ধাপ সম্পন্ন করা যেকোনো দিনের গেম এখানে বেছে খেলতে পারবে। লক থাকা দিন এখানে দেখাবে না।</p><div id="gameLibrary"></div></section><section class="panel"><div class="between"><h2>দৈনিক অগ্রগতি</h2></div><div id="records" class="records"></div></section><section id="final" class="panel hide"><h2>Grand Final</h2><p>English ৫ মিনিট: লক্ষ্য ৩০ WPM ও ৯২% accuracy। বাংলা ৫ মিনিট: লক্ষ্য ২০ WPM ও ৯০% accuracy।</p><button id="finalBtn">Final পরীক্ষা</button><p id="finalInfo"></p></section></div></div>
 </div>
-<section id="excel-view" class="future-module course-detail-view" hidden><button type="button" class="course-back" data-back-courses>← কোর্স তালিকায় ফিরে যান</button><span>MODULE 02</span><h2>Microsoft Excel</h2><p>Excel-এর পাঠ, অনুশীলন ও ব্যবহারিক কাজ পরবর্তী ধাপে যুক্ত করা হবে।</p><small>এই অংশটি প্রস্তুতির অপেক্ষায় আছে।</small></section>
+<section id="excel-view" class="course-detail-view excel-course" hidden>
+ <button type="button" class="course-back" data-back-courses>← কোর্স তালিকায় ফিরে যান</button>
+ <header class="excel-course-head"><span class="eyebrow">MODULE 02 · 30-DAY PRACTICAL COURSE</span><h2>Microsoft Excel — ৩০ দিনের কোর্স</h2><p>প্রতিদিন একটি নতুন বিষয় শিখুন। প্রতি ৫ দিনের পাঠ শেষে একটি ব্যবহারিক অনুশীলন সম্পন্ন করে পরের ধাপে যান।</p>
+ <div class="excel-progress"><strong id="excelProgressText">0 / 30 দিন সম্পন্ন</strong><div class="bar"><i id="excelProgressBar"></i></div></div></header>
+ <div class="excel-course-layout">
+  <aside class="excel-day-panel"><h3>৩০ দিনের পাঠ</h3><div id="excelDayList" class="excel-day-list"></div></aside>
+  <article class="excel-lesson-panel">
+   <div class="excel-lesson-top"><span id="excelLessonTag">DAY 01</span><span id="excelLessonStatus">শুরু হয়নি</span></div>
+   <h3 id="excelLessonTitle">Excel পরিচিতি</h3><p id="excelLessonText">Excel কী এবং কোথায় ব্যবহার হয় তা শিখুন।</p>
+   <div class="excel-concept"><strong>আজ যা শিখবেন</strong><p id="excelConcept"></p></div>
+   <div class="excel-task"><strong>আজকের কাজ</strong><p id="excelTask"></p></div>
+   <div class="excel-sheet-wrap"><div class="excel-sheet-head"><strong>হাতে-কলমে Spreadsheet</strong><small>ঘরে ক্লিক করে তথ্য লিখুন</small></div><table class="excel-practice-sheet"><thead><tr><th>পণ্য</th><th>পরিমাণ</th><th>দর</th><th>মোট</th></tr></thead><tbody id="excelSheetBody"></tbody></table><div class="excel-sheet-actions"><button type="button" id="excelCalc">মোট হিসাব করুন</button><span id="excelSheetResult">নিজে তথ্য লিখে হিসাব করুন</span></div></div>
+   <div class="excel-lesson-actions"><button type="button" id="excelComplete">আজকের পাঠ সম্পন্ন</button><button type="button" id="excelNext" disabled>পরের দিন →</button></div>
+   <section id="excelCheckpoint" class="excel-checkpoint" hidden><span class="eyebrow">5-DAY PRACTICE CHECKPOINT</span><h3 id="excelCheckpointTitle">৫ দিনের অনুশীলন</h3><p id="excelCheckpointText"></p><label for="excelPracticeAnswer">অনুশীলনের ফলাফল / উত্তর লিখুন</label><textarea id="excelPracticeAnswer" rows="3" placeholder="আপনার তৈরি হিসাব বা কাজের বিবরণ লিখুন"></textarea><button type="button" id="excelPracticeComplete">অনুশীলন জমা দিন</button><small id="excelPracticeStatus"></small></section>
+  </article>
+ </div>
+</section>
 <section id="powerpoint-view" class="future-module course-detail-view" hidden><button type="button" class="course-back" data-back-courses>← কোর্স তালিকায় ফিরে যান</button><span>MODULE 03</span><h2>Microsoft PowerPoint</h2><p>PowerPoint-এর পাঠ ও প্রেজেন্টেশন অনুশীলন পরবর্তী ধাপে যুক্ত করা হবে।</p><small>এই অংশটি প্রস্তুতির অপেক্ষায় আছে।</small></section>
 <section id="photoshop-view" class="future-module course-detail-view" hidden><button type="button" class="course-back" data-back-courses>← কোর্স তালিকায় ফিরে যান</button><span>MODULE 04</span><h2>Adobe Photoshop</h2><p>Photoshop-এর ছবি সম্পাদনা ও ডিজাইন অনুশীলন পরবর্তী ধাপে যুক্ত করা হবে।</p><small>এই অংশটি প্রস্তুতির অপেক্ষায় আছে।</small></section>
 
@@ -160,6 +176,73 @@
  $('footerPractice').addEventListener('click',e=>{e.preventDefault();showOnly(practice)});
  document.querySelectorAll('[data-open-course]').forEach(btn=>btn.addEventListener('click',()=>showOnly(views[btn.dataset.openCourse])));
  document.querySelectorAll('[data-back-courses]').forEach(btn=>btn.addEventListener('click',()=>showOnly(list)));
+
+ // Excel 30-day guided course with a practical checkpoint after every five lessons.
+ const excelLessons=[
+ ['Excel পরিচিতি','Spreadsheet কী, Workbook ও Worksheet কীভাবে কাজ করে তা চিনুন।','Excel-এ সারি, কলাম, সেল ও Sheet-এর ধারণা শিখুন।','একটি নতুন Workbook খুলে Sheet1, Row ও Column চিহ্নিত করুন।'],
+ ['Workbook ও Worksheet','Workbook হলো Excel ফাইল; এর ভেতরে এক বা একাধিক Worksheet থাকে।','নতুন Sheet যোগ, নাম পরিবর্তন ও Sheet সরানোর পদ্ধতি শিখুন।','তিনটি Sheet তৈরি করে নাম দিন: আয়, ব্যয়, হিসাব।'],
+ ['Cell ও Cell Address','প্রতিটি ঘরের ঠিকানা কলাম অক্ষর ও সারি নম্বর দিয়ে হয়; যেমন A1।','Cell, Range এবং Name Box-এর ব্যবহার শিখুন।','A1, B3 ও A1:C5 সেল রেঞ্জ নির্বাচন করুন।'],
+ ['তথ্য প্রবেশ ও সম্পাদনা','Cell-এ লেখা, সংখ্যা ও তারিখ লিখুন; F2 বা ডাবল ক্লিকে সম্পাদনা করা যায়।','ডেটা লেখা, পরিবর্তন, মুছে ফেলা ও Undo শিখুন।','একটি তালিকায় ৫টি পণ্যের নাম, পরিমাণ ও দর লিখুন।'],
+ ['Save ও File Format','Ctrl+S দিয়ে ফাইল সংরক্ষণ করুন; .xlsx হলো Excel Workbook ফরম্যাট।','Save As, ফাইলের নাম ও ফোল্ডার নির্বাচন শিখুন।','ফাইলটি Excel-Practice নামে .xlsx ফরম্যাটে সংরক্ষণ করুন।'],
+ ['Row, Column ও Cell Size','Row height ও Column width বদলে তথ্য পড়ার উপযোগী করুন।','Row/Column যোগ, মুছা, লুকানো ও মাপ পরিবর্তন শিখুন।','আপনার পণ্যের তালিকায় নতুন সারি যোগ করে কলামের প্রস্থ ঠিক করুন।'],
+ ['Copy, Cut ও Paste','Ctrl+C, Ctrl+X ও Ctrl+V দিয়ে তথ্য কপি, সরানো ও পেস্ট করা যায়।','Fill Handle ও AutoFill-এর প্রাথমিক ব্যবহার শিখুন।','পণ্যের তালিকা অন্য Sheet-এ কপি করুন এবং সিরিয়াল ১–৫ পূরণ করুন।'],
+ ['Number Format','Number, Currency, Percentage ও Date ফরম্যাট ব্যবহার করে মান পরিষ্কারভাবে দেখান।','সংখ্যা ও টাকার ফরম্যাট প্রয়োগ শিখুন।','দরের কলাম Currency এবং তারিখের কলাম Date ফরম্যাট করুন।'],
+ ['Font ও Cell Formatting','Bold, Font Color, Fill Color, Border ও Alignment দিয়ে টেবিল সাজান।','Cell-এর লেখা ও ঘরের চেহারা পরিবর্তন শিখুন।','শিরোনাম Bold করুন, রঙ দিন এবং টেবিলে Border দিন।'],
+ ['Sort ও Filter','Sort তথ্য সাজায়; Filter নির্দিষ্ট শর্তের তথ্য দেখায়।','A–Z, বড়-ছোট এবং Filter ব্যবহার শিখুন।','পণ্যের তালিকা নাম অনুযায়ী সাজান এবং একটি পণ্য Filter করুন।'],
+ ['Formula-এর নিয়ম','Excel Formula সবসময় = দিয়ে শুরু হয়; যেমন =B2*C2।','Cell reference দিয়ে হিসাব করার নিয়ম শিখুন।','পরিমাণ B2 এবং দর C2 হলে D2-তে =B2*C2 লিখুন।'],
+ ['SUM Function','SUM একাধিক সংখ্যার যোগফল বের করে; যেমন =SUM(D2:D6)।','Range-এর মোট যোগফল বের করা শিখুন।','পণ্যের মোট টাকার যোগফল SUM দিয়ে বের করুন।'],
+ ['AVERAGE Function','AVERAGE নির্বাচিত সংখ্যাগুলোর গড় বের করে।','গড় হিসাব ও Range নির্বাচন শিখুন।','পাঁচ দিনের বিক্রির গড় বের করুন।'],
+ ['MIN ও MAX','MIN সর্বনিম্ন এবং MAX সর্বোচ্চ মান বের করে।','ডেটার সর্বনিম্ন ও সর্বোচ্চ মান শনাক্ত করুন।','পাঁচটি পণ্যের মধ্যে সর্বনিম্ন ও সর্বোচ্চ দর বের করুন।'],
+ ['COUNT ও COUNTA','COUNT সংখ্যাযুক্ত সেল গোনে; COUNTA খালি নয় এমন সেল গোনে।','ডেটা গণনার দুইটি Function শিখুন।','তালিকায় কয়টি সংখ্যার ঘর ও কয়টি পূরণ করা ঘর আছে বের করুন।'],
+ ['IF Function','IF শর্ত সত্য বা মিথ্যা হলে আলাদা ফল দেখায়; যেমন =IF(B2>=40,"Pass","Fail")।','শর্ত অনুযায়ী ফলাফল দেখানো শিখুন।','শিক্ষার্থীর নম্বর ৪০ বা বেশি হলে Pass, না হলে Fail দেখান।'],
+ ['Percentage','অংশকে মোট দিয়ে ভাগ করে ১০০ গুণ করলে শতকরা পাওয়া যায়।','Percentage Formula ও Percentage Format শিখুন।','মোট ৫০০ নম্বরের মধ্যে প্রাপ্ত নম্বরের শতকরা বের করুন।'],
+ ['Relative ও Absolute Reference','A1 কপি করলে বদলাতে পারে; $A$1 স্থির Reference হিসেবে থাকে।','ডলার চিহ্ন দিয়ে Cell Reference স্থির করা শিখুন।','একটি নির্দিষ্ট VAT হার সব পণ্যের হিসাবে প্রয়োগ করুন।'],
+ ['Date ও Time','Excel তারিখ ও সময়কে হিসাবযোগ্য মান হিসেবে সংরক্ষণ করে।','তারিখ লেখা, ফরম্যাট এবং দিন গণনা শিখুন।','কাজের শুরুর ও শেষের তারিখ লিখে ব্যবধান বের করুন।'],
+ ['Text Functions','LEFT, RIGHT, MID ও CONCAT দিয়ে লেখা থেকে অংশ নেওয়া বা যুক্ত করা যায়।','Text Function-এর প্রাথমিক ব্যবহার শিখুন।','নাম থেকে প্রথম অংশ আলাদা করুন এবং দুইটি নাম যুক্ত করুন।'],
+ ['Conditional Formatting','নির্দিষ্ট শর্ত পূরণ হলে Cell স্বয়ংক্রিয়ভাবে রঙিন হয়।','শর্তভিত্তিক রঙ ও Highlight শিখুন।','৪০-এর কম নম্বর লাল এবং ৮০ বা বেশি সবুজ করুন।'],
+ ['Data Validation','Data Validation দিয়ে সেলে কী ধরনের তথ্য দেওয়া যাবে তা নিয়ন্ত্রণ করা যায়।','Dropdown List ও Input Rule তৈরি শিখুন।','পণ্যের Status-এর জন্য Stock ও Out of Stock Dropdown বানান।'],
+ ['Charts','Column, Bar, Line ও Pie Chart দিয়ে তথ্যের চিত্র তৈরি হয়।','ডেটা নির্বাচন ও Chart Insert শিখুন।','মাসভিত্তিক বিক্রির একটি Column Chart তৈরি করুন।'],
+ ['Page Layout ও Print','Print Area, Orientation, Margin ও Scaling দিয়ে প্রিন্ট সাজান।','পৃষ্ঠা সেটআপ ও Print Preview শিখুন।','এক পাতায় টেবিলটি ফিট করে Landscape Print Preview দেখুন।'],
+ ['তথ্য সুরক্ষা ও Freeze Panes','Freeze Panes শিরোনাম স্থির রাখে; Protect Sheet সম্পাদনা সীমিত করে।','শিরোনাম স্থির ও Sheet সুরক্ষার ধারণা শিখুন।','প্রথম Row Freeze করুন এবং প্রয়োজনীয় Cell Lock করুন।'],
+ ['VLOOKUP-এর ধারণা','VLOOKUP একটি টেবিল থেকে নির্দিষ্ট মান খুঁজে আনে।','Lookup Table ও Exact Match-এর ধারণা শিখুন।','পণ্যের কোড দিয়ে তার নাম বা দর খুঁজে বের করুন।'],
+ ['PivotTable পরিচিতি','PivotTable বড় ডেটাকে বিভাগ অনুযায়ী সংক্ষিপ্ত করে দেখায়।','Row, Values ও Sum-এর ব্যবহার শিখুন।','বিক্রির তালিকা থেকে পণ্যভিত্তিক মোট বিক্রি দেখান।'],
+ ['সমন্বিত হিসাবের শিট','একটি কাজের শিটে Input, Formula, Format ও Summary একসঙ্গে সাজান।','দৈনিক আয়-ব্যয়ের হিসাব তৈরি শিখুন।','তারিখ, বিবরণ, আয়, ব্যয় ও Balance-সহ শিট বানান।'],
+ ['বাস্তব প্রজেক্ট: দোকানের হিসাব','পণ্যের নাম, পরিমাণ, একক দর, মোট মূল্য ও সারাংশ একত্র করুন।','একটি ব্যবহারযোগ্য বিক্রয় হিসাব তৈরি করুন।','কমপক্ষে ১০টি পণ্যের তালিকা, মোট বিক্রি ও গড় বিক্রি তৈরি করুন।'],
+ ['চূড়ান্ত প্রস্তুতি ও দক্ষতা যাচাই','আগের ২৯ দিনের বিষয় একত্রে প্রয়োগ করে একটি সম্পূর্ণ Workbook তৈরি করুন।','Formula, Formatting, Chart, Sort/Filter ও Print পুনরালোচনা করুন।','একটি মাসিক বিক্রয় রিপোর্ট তৈরি করে সংরক্ষণ ও Print Preview করুন।']
+ ];
+ const excelStoreKey='msom_excel_30day_v1';
+ let excelState={done:[],checks:[]};
+ try{excelState={...excelState,...JSON.parse(localStorage.getItem(excelStoreKey)||'{}')}}catch(e){}
+ let excelCurrent=1;
+ const excelSave=()=>localStorage.setItem(excelStoreKey,JSON.stringify(excelState));
+ const excelUnlocked=d=>d===1||excelState.done.includes(d-1)&&((d-1)%5!==0||excelState.checks.includes(d-1));
+ const excelRenderList=()=>{
+  $('excelDayList').innerHTML='';
+  for(let d=1;d<=30;d++){
+   const b=document.createElement('button');b.type='button';b.className='excel-day-button'+(d===excelCurrent?' active':'')+(excelState.done.includes(d)?' done':'');b.disabled=!excelUnlocked(d);b.innerHTML='<span>দিন '+String(d).padStart(2,'0')+'</span><small>'+(excelState.done.includes(d)?'✓ সম্পন্ন':b.disabled?'🔒 লক':'পাঠ খুলুন')+'</small>';b.addEventListener('click',()=>{excelCurrent=d;excelRender()});$('excelDayList').appendChild(b);
+   if(d%5===0){const p=document.createElement('div');p.className='excel-checkpoint-marker';p.textContent='দিন '+d+' শেষে অনুশীলন';$('excelDayList').appendChild(p)}
+  }
+  $('excelProgressText').textContent=excelState.done.length+' / 30 দিন সম্পন্ন · '+excelState.checks.length+' / 6 অনুশীলন';
+  $('excelProgressBar').style.width=(excelState.done.length/30*100)+'%';
+ };
+ const excelRender=()=>{
+  const lesson=excelLessons[excelCurrent-1],isDone=excelState.done.includes(excelCurrent);
+  $('excelLessonTag').textContent='DAY '+String(excelCurrent).padStart(2,'0');
+  $('excelLessonTitle').textContent=lesson[0];$('excelLessonText').textContent=lesson[1];$('excelConcept').textContent=lesson[2];$('excelTask').textContent=lesson[3];
+  $('excelLessonStatus').textContent=isDone?'✓ সম্পন্ন':'চলমান';$('excelComplete').disabled=isDone;$('excelComplete').textContent=isDone?'পাঠ সম্পন্ন হয়েছে':'আজকের পাঠ সম্পন্ন';
+  $('excelNext').disabled=!isDone||excelCurrent===30||!excelUnlocked(excelCurrent+1);
+  const checkpoint=excelCurrent%5===0;$('excelCheckpoint').hidden=!checkpoint;
+  if(checkpoint){$('excelCheckpointTitle').textContent=excelCurrent+' দিনের শেখার পর অনুশীলন';$('excelCheckpointText').textContent='দিন '+(excelCurrent-4)+' থেকে '+excelCurrent+' পর্যন্ত শেখা বিষয় ব্যবহার করে একটি ছোট Excel Sheet তৈরি করুন। '+(excelCurrent===30?'এটি চূড়ান্ত অনুশীলন।':'এটি জমা দিলে পরের পাঁচ দিনের পাঠ খুলবে।');$('excelPracticeAnswer').value='';$('excelPracticeStatus').textContent=excelState.checks.includes(excelCurrent)?'এই অনুশীলন সম্পন্ন হয়েছে।':'';$('excelPracticeComplete').disabled=excelState.checks.includes(excelCurrent)}
+  excelRenderList();
+ };
+ $('excelComplete').addEventListener('click',()=>{if(!excelState.done.includes(excelCurrent))excelState.done.push(excelCurrent);excelSave();excelRender()});
+ $('excelNext').addEventListener('click',()=>{if(excelCurrent<30&&excelUnlocked(excelCurrent+1)){excelCurrent++;excelRender()}});
+ $('excelPracticeComplete').addEventListener('click',()=>{if(!$('excelPracticeAnswer').value.trim()){ $('excelPracticeStatus').textContent='অনুশীলনের কাজের বিবরণ লিখুন।';return}if(!excelState.checks.includes(excelCurrent))excelState.checks.push(excelCurrent);excelSave();$('excelPracticeStatus').textContent='অনুশীলন সংরক্ষিত হয়েছে। পরের পাঁচ দিনের পাঠ খুলে গেছে।';$('excelPracticeComplete').disabled=true;excelRenderList();if(excelCurrent<30){$('excelNext').disabled=false}});
+ const sheetRows=[['খাতা',2,80],['কলম',5,10],['পেন্সিল',3,15],['রাবার',4,8],['স্কেল',2,25]];
+ $('excelSheetBody').innerHTML=sheetRows.map((r,i)=>'<tr><td contenteditable="true">'+r[0]+'</td><td contenteditable="true" class="excel-num">'+r[1]+'</td><td contenteditable="true" class="excel-num">'+r[2]+'</td><td class="excel-row-total">—</td></tr>').join('');
+ $('excelCalc').addEventListener('click',()=>{let total=0;document.querySelectorAll('#excelSheetBody tr').forEach(row=>{const cells=row.querySelectorAll('td'),qty=Number(cells[1].textContent),price=Number(cells[2].textContent),sum=qty*price;cells[3].textContent=Number.isFinite(sum)?sum.toFixed(2):'—';if(Number.isFinite(sum))total+=sum});$('excelSheetResult').textContent='সর্বমোট: ৳ '+total.toFixed(2)});
+ excelRender();
+
  let language='bn',startedAt=0,timer=null;
  const prompts={bn:'আমি প্রতিদিন বাংলা টাইপিং অনুশীলন করি। নিয়মিত চর্চা করলে গতি ও নির্ভুলতা বাড়ে।',en:'I practice typing every day. Regular practice helps me improve my speed and accuracy.'};
  const update=()=>{
