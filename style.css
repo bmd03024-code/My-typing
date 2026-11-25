@@ -394,3 +394,12 @@ header nav{align-items:center}header nav a{color:var(--muted);text-decoration:no
 .course-card{align-items:flex-start}
 .course-card .typing-course-summary{text-align:left}
 @media(max-width:600px){.typing-course-summary{padding:10px}.typing-course-summary ul{font-size:11px}}
+
+
+/* Visible, clickable 35-level maps for both typing tracks */
+.typing-level-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0 4px}
+.typing-level-button{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;padding:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);text-align:left}
+.typing-level-button small{font-size:11px;color:var(--muted);letter-spacing:0}
+.typing-level-button:disabled{opacity:.48;cursor:not-allowed}
+.typing-level-button.level-done{border-color:var(--accent);color:var(--accent)}
+@media(max-width:600px){.typing-level-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.typing-level-button{padding:8px;font-size:12px}}
