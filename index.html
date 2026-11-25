@@ -132,7 +132,7 @@
 </div>
 <section id="excel-view" class="course-detail-view excel-course" hidden>
  <button type="button" class="course-back" data-back-courses>← কোর্স তালিকায় ফিরে যান</button>
- <header class="excel-course-head"><span class="eyebrow">MODULE 02 · 30-DAY PRACTICAL COURSE</span><h2>Microsoft Excel — ৩০ দিনের কোর্স</h2><p>প্রতিদিন একটি নতুন বিষয় শিখুন। প্রতি ৫ দিনের পাঠ শেষে একটি ব্যবহারিক অনুশীলন সম্পন্ন করে পরের ধাপে যান।</p>
+ <header class="excel-course-head"><span class="eyebrow">MODULE 02 · 30-DAY PRACTICAL COURSE</span><h2>Microsoft Excel — ৩০ দিনের কোর্স</h2><p>প্রতিদিন একটি আলাদা পাঠ খুলুন, Spreadsheet-এ নিজে তথ্য লিখুন, Formula চালান এবং কাজ যাচাই করুন।</p>
  <div class="excel-progress"><strong id="excelProgressText">0 / 30 দিন সম্পন্ন</strong><div class="bar"><i id="excelProgressBar"></i></div></div></header>
  <div class="excel-course-layout">
   <aside class="excel-day-panel"><h3>৩০ দিনের পাঠ</h3><div id="excelDayList" class="excel-day-list"></div></aside>
@@ -141,9 +141,11 @@
    <h3 id="excelLessonTitle">Excel পরিচিতি</h3><p id="excelLessonText">Excel কী এবং কোথায় ব্যবহার হয় তা শিখুন।</p>
    <div class="excel-concept"><strong>আজ যা শিখবেন</strong><p id="excelConcept"></p></div>
    <div class="excel-task"><strong>আজকের কাজ</strong><p id="excelTask"></p></div>
-   <div class="excel-sheet-wrap"><div class="excel-sheet-head"><strong>হাতে-কলমে Spreadsheet</strong><small>ঘরে ক্লিক করে তথ্য লিখুন</small></div><table class="excel-practice-sheet"><thead><tr><th>পণ্য</th><th>পরিমাণ</th><th>দর</th><th>মোট</th></tr></thead><tbody id="excelSheetBody"></tbody></table><div class="excel-sheet-actions"><button type="button" id="excelCalc">মোট হিসাব করুন</button><span id="excelSheetResult">নিজে তথ্য লিখে হিসাব করুন</span></div></div>
-   <div class="excel-lesson-actions"><button type="button" id="excelComplete">আজকের পাঠ সম্পন্ন</button><button type="button" id="excelNext" disabled>পরের দিন →</button></div>
-   <section id="excelCheckpoint" class="excel-checkpoint" hidden><span class="eyebrow">5-DAY PRACTICE CHECKPOINT</span><h3 id="excelCheckpointTitle">৫ দিনের অনুশীলন</h3><p id="excelCheckpointText"></p><label for="excelPracticeAnswer">অনুশীলনের ফলাফল / উত্তর লিখুন</label><textarea id="excelPracticeAnswer" rows="3" placeholder="আপনার তৈরি হিসাব বা কাজের বিবরণ লিখুন"></textarea><button type="button" id="excelPracticeComplete">অনুশীলন জমা দিন</button><small id="excelPracticeStatus"></small></section>
+   <div class="excel-sheet-wrap"><div class="excel-sheet-head"><strong>হাতে-কলমে Spreadsheet Lab</strong><small>ঘরে ক্লিক করে তথ্য লিখুন · সেল নির্বাচন করে Formula দিন</small></div>
+   <div class="excel-formula-bar"><strong id="excelActiveCell">A1</strong><input id="excelFormulaInput" type="text" placeholder="যেমন: =SUM(B2:B6) অথবা =B2*C2"><button type="button" id="excelApplyFormula">Formula প্রয়োগ</button></div>
+   <div class="excel-grid-scroll"><table class="excel-practice-sheet" id="excelGrid"><thead id="excelGridHead"></thead><tbody id="excelSheetBody"></tbody></table></div>
+   <div class="excel-sheet-actions"><button type="button" id="excelCalc">Formula / হিসাব চালান</button><button type="button" id="excelResetSheet">নমুনা ডেটা ফিরিয়ে আনুন</button><button type="button" id="excelDownloadCsv">CSV ডাউনলোড</button><span id="excelSheetResult">একটি সেল নির্বাচন করে কাজ শুরু করুন</span></div></div>
+   <div class="excel-lesson-actions"><button type="button" id="excelComplete">আজকের কাজ সম্পন্ন</button><button type="button" id="excelNext" disabled>পরের দিন →</button></div>
   </article>
  </div>
 </section>
@@ -220,39 +222,81 @@
  ['বাস্তব প্রজেক্ট: দোকানের হিসাব','পণ্যের নাম, পরিমাণ, একক দর, মোট মূল্য ও সারাংশ একত্র করুন।','একটি ব্যবহারযোগ্য বিক্রয় হিসাব তৈরি করুন।','কমপক্ষে ১০টি পণ্যের তালিকা, মোট বিক্রি ও গড় বিক্রি তৈরি করুন।'],
  ['চূড়ান্ত প্রস্তুতি ও দক্ষতা যাচাই','আগের ২৯ দিনের বিষয় একত্রে প্রয়োগ করে একটি সম্পূর্ণ Workbook তৈরি করুন।','Formula, Formatting, Chart, Sort/Filter ও Print পুনরালোচনা করুন।','একটি মাসিক বিক্রয় রিপোর্ট তৈরি করে সংরক্ষণ ও Print Preview করুন।']
  ];
- const excelStoreKey='msom_excel_30day_v1';
- let excelState={done:[],checks:[]};
+ const excelStoreKey='msom_excel_30day_v2';
+ let excelState={done:[]};
  try{excelState={...excelState,...JSON.parse(localStorage.getItem(excelStoreKey)||'{}')}}catch(e){}
- let excelCurrent=1;
+ let excelCurrent=1,excelSelected='A1';
+ const excelCols=['A','B','C','D','E','F'];
  const excelSave=()=>localStorage.setItem(excelStoreKey,JSON.stringify(excelState));
- const excelUnlocked=d=>d===1||excelState.done.includes(d-1)&&((d-1)%5!==0||excelState.checks.includes(d-1));
  const excelRenderList=()=>{
   $('excelDayList').innerHTML='';
   for(let d=1;d<=30;d++){
-   const b=document.createElement('button');b.type='button';b.className='excel-day-button'+(d===excelCurrent?' active':'')+(excelState.done.includes(d)?' done':'');b.disabled=!excelUnlocked(d);b.innerHTML='<span>দিন '+String(d).padStart(2,'0')+'</span><small>'+(excelState.done.includes(d)?'✓ সম্পন্ন':b.disabled?'🔒 লক':'পাঠ খুলুন')+'</small>';b.addEventListener('click',()=>{excelCurrent=d;excelRender()});$('excelDayList').appendChild(b);
-   if(d%5===0){const p=document.createElement('div');p.className='excel-checkpoint-marker';p.textContent='দিন '+d+' শেষে অনুশীলন';$('excelDayList').appendChild(p)}
+   const b=document.createElement('button');b.type='button';b.className='excel-day-button'+(d===excelCurrent?' active':'')+(excelState.done.includes(d)?' done':'');
+   b.innerHTML='<span>দিন '+String(d).padStart(2,'0')+'</span><small>'+(excelState.done.includes(d)?'✓ সম্পন্ন':'পাঠ খুলুন')+'</small>';
+   b.addEventListener('click',()=>{excelCurrent=d;excelRender()});$('excelDayList').appendChild(b);
   }
-  $('excelProgressText').textContent=excelState.done.length+' / 30 দিন সম্পন্ন · '+excelState.checks.length+' / 6 অনুশীলন';
+  $('excelProgressText').textContent=excelState.done.length+' / 30 দিন সম্পন্ন';
   $('excelProgressBar').style.width=(excelState.done.length/30*100)+'%';
+ };
+ const excelSample=[
+  ['পণ্য','পরিমাণ','দর','মোট','মন্তব্য','তারিখ'],
+  ['খাতা','2','80','=B2*C2','স্টেশনারি','2026-11-25'],
+  ['কলম','5','10','=B3*C3','স্টেশনারি','2026-11-25'],
+  ['পেন্সিল','3','15','=B4*C4','স্টেশনারি','2026-11-25'],
+  ['রাবার','4','8','=B5*C5','স্টেশনারি','2026-11-25'],
+  ['স্কেল','2','25','=B6*C6','স্টেশনারি','2026-11-25']
+ ];
+ const excelRenderGrid=()=>{
+  $('excelGridHead').innerHTML='<tr><th></th>'+excelCols.map(c=>'<th>'+c+'</th>').join('')+'</tr>';
+  $('excelSheetBody').innerHTML=excelSample.map((row,r)=>'<tr><th>'+(r+1)+'</th>'+excelCols.map((c,i)=>'<td contenteditable="true" data-cell="'+c+(r+1)+'" class="'+(i===3?'excel-formula-cell':'')+'">'+(row[i]??'')+'</td>').join('')+'</tr>').join('');
+  document.querySelectorAll('#excelGrid [data-cell]').forEach(cell=>cell.addEventListener('click',()=>{excelSelected=cell.dataset.cell;$('excelActiveCell').textContent=excelSelected;$('excelFormulaInput').value=cell.textContent.trim()}));
+  const first=$('excelGrid').querySelector('[data-cell="A1"]');if(first)first.classList.add('excel-cell-selected');
+  excelSelected='A1';$('excelActiveCell').textContent='A1';$('excelFormulaInput').value='পণ্য';
+ };
+ const excelCellValue=(ref)=>{
+  const cell=$('excelGrid').querySelector('[data-cell="'+ref.toUpperCase()+'"]');
+  return cell?cell.textContent.trim():'0';
+ };
+ const excelEvaluate=(formula)=>{
+  let f=String(formula||'').trim();if(!f.startsWith('='))return f;
+  const fn=f.slice(1).trim();
+  const rangeMatch=fn.match(/^(SUM|AVERAGE|MIN|MAX|COUNT|COUNTA)\(([A-F]\d+):([A-F]\d+)\)$/i);
+  if(rangeMatch){
+   const [,name,from,to]=rangeMatch, c1=from.match(/[A-F]/i)[0].toUpperCase().charCodeAt(0),c2=to.match(/[A-F]/i)[0].toUpperCase().charCodeAt(0),r1=Number(from.match(/\d+/)[0]),r2=Number(to.match(/\d+/)[0]),vals=[];
+   for(let r=Math.min(r1,r2);r<=Math.max(r1,r2);r++)for(let c=Math.min(c1,c2);c<=Math.max(c1,c2);c++){const v=excelCellValue(String.fromCharCode(c)+r);if(v!==''&&Number.isFinite(Number(v)))vals.push(Number(v));else if(name.toUpperCase()==='COUNTA'&&v!=='')vals.push(1)}
+   const n=name.toUpperCase();if(n==='SUM')return vals.reduce((a,b)=>a+b,0);if(n==='AVERAGE')return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;if(n==='MIN')return vals.length?Math.min(...vals):0;if(n==='MAX')return vals.length?Math.max(...vals):0;if(n==='COUNT')return vals.length;if(n==='COUNTA')return vals.length;
+  }
+  const expression=fn.replace(/\b([A-F]\d+)\b/gi,(_,ref)=>{const v=Number(excelCellValue(ref));return Number.isFinite(v)?String(v):'0'});
+  if(!/^[0-9+\-*/(). %]+$/.test(expression))return '#VALUE!';
+  try{const result=Function('"use strict";return ('+expression+')')();return Number.isFinite(result)?String(Math.round(result*10000)/10000):'#VALUE!'}catch(e){return '#VALUE!'}
+ };
+ const excelRunFormulas=()=>{
+  document.querySelectorAll('#excelGrid [data-cell]').forEach(cell=>{const v=cell.textContent.trim();if(v.startsWith('=')){cell.dataset.formula=v;cell.textContent=excelEvaluate(v)}});
+  let sum=0;document.querySelectorAll('#excelGrid [data-cell]').forEach(cell=>{if(cell.dataset.cell[0]==='D'){const n=Number(cell.textContent);if(Number.isFinite(n))sum+=n}});
+  $('excelSheetResult').textContent='D কলামের মোট: '+sum.toFixed(2)+' · Formula গুলো হিসাব করা হয়েছে';
  };
  const excelRender=()=>{
   const lesson=excelLessons[excelCurrent-1],isDone=excelState.done.includes(excelCurrent);
   $('excelLessonTag').textContent='DAY '+String(excelCurrent).padStart(2,'0');
   $('excelLessonTitle').textContent=lesson[0];$('excelLessonText').textContent=lesson[1];$('excelConcept').textContent=lesson[2];$('excelTask').textContent=lesson[3];
-  $('excelLessonStatus').textContent=isDone?'✓ সম্পন্ন':'চলমান';$('excelComplete').disabled=isDone;$('excelComplete').textContent=isDone?'পাঠ সম্পন্ন হয়েছে':'আজকের পাঠ সম্পন্ন';
-  $('excelNext').disabled=!isDone||excelCurrent===30||!excelUnlocked(excelCurrent+1);
-  const checkpoint=excelCurrent%5===0;$('excelCheckpoint').hidden=!checkpoint;
-  if(checkpoint){$('excelCheckpointTitle').textContent=excelCurrent+' দিনের শেখার পর অনুশীলন';$('excelCheckpointText').textContent='দিন '+(excelCurrent-4)+' থেকে '+excelCurrent+' পর্যন্ত শেখা বিষয় ব্যবহার করে একটি ছোট Excel Sheet তৈরি করুন। '+(excelCurrent===30?'এটি চূড়ান্ত অনুশীলন।':'এটি জমা দিলে পরের পাঁচ দিনের পাঠ খুলবে।');$('excelPracticeAnswer').value='';$('excelPracticeStatus').textContent=excelState.checks.includes(excelCurrent)?'এই অনুশীলন সম্পন্ন হয়েছে।':'';$('excelPracticeComplete').disabled=excelState.checks.includes(excelCurrent)}
-  excelRenderList();
+  $('excelLessonStatus').textContent=isDone?'✓ সম্পন্ন':'চলমান';$('excelComplete').disabled=isDone;$('excelComplete').textContent=isDone?'কাজ সম্পন্ন হয়েছে':'আজকের কাজ সম্পন্ন';
+  $('excelNext').disabled=!isDone||excelCurrent===30;
+  excelRenderGrid();excelRenderList();
  };
  $('excelComplete').addEventListener('click',()=>{if(!excelState.done.includes(excelCurrent))excelState.done.push(excelCurrent);excelSave();excelRender()});
- $('excelNext').addEventListener('click',()=>{if(excelCurrent<30&&excelUnlocked(excelCurrent+1)){excelCurrent++;excelRender()}});
- $('excelPracticeComplete').addEventListener('click',()=>{if(!$('excelPracticeAnswer').value.trim()){ $('excelPracticeStatus').textContent='অনুশীলনের কাজের বিবরণ লিখুন।';return}if(!excelState.checks.includes(excelCurrent))excelState.checks.push(excelCurrent);excelSave();$('excelPracticeStatus').textContent='অনুশীলন সংরক্ষিত হয়েছে। পরের পাঁচ দিনের পাঠ খুলে গেছে।';$('excelPracticeComplete').disabled=true;excelRenderList();if(excelCurrent<30){$('excelNext').disabled=false}});
- const sheetRows=[['খাতা',2,80],['কলম',5,10],['পেন্সিল',3,15],['রাবার',4,8],['স্কেল',2,25]];
- $('excelSheetBody').innerHTML=sheetRows.map((r,i)=>'<tr><td contenteditable="true">'+r[0]+'</td><td contenteditable="true" class="excel-num">'+r[1]+'</td><td contenteditable="true" class="excel-num">'+r[2]+'</td><td class="excel-row-total">—</td></tr>').join('');
- $('excelCalc').addEventListener('click',()=>{let total=0;document.querySelectorAll('#excelSheetBody tr').forEach(row=>{const cells=row.querySelectorAll('td'),qty=Number(cells[1].textContent),price=Number(cells[2].textContent),sum=qty*price;cells[3].textContent=Number.isFinite(sum)?sum.toFixed(2):'—';if(Number.isFinite(sum))total+=sum});$('excelSheetResult').textContent='সর্বমোট: ৳ '+total.toFixed(2)});
+ $('excelNext').addEventListener('click',()=>{if(excelCurrent<30){excelCurrent++;excelRender()}});
+ $('excelApplyFormula').addEventListener('click',()=>{
+  const cell=$('excelGrid').querySelector('[data-cell="'+excelSelected+'"]');if(!cell)return;
+  cell.textContent=$('excelFormulaInput').value.trim();delete cell.dataset.formula;excelRunFormulas();
+ });
+ $('excelFormulaInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('excelApplyFormula').click()});
+ $('excelCalc').addEventListener('click',excelRunFormulas);
+ $('excelResetSheet').addEventListener('click',()=>{excelRenderGrid();$('excelSheetResult').textContent='নমুনা ডেটা ফিরিয়ে আনা হয়েছে।'});
+ $('excelDownloadCsv').addEventListener('click',()=>{
+  const rows=[...$('excelGrid').querySelectorAll('tr')].map(row=>[...row.querySelectorAll('th,td')].map(c=>'"'+c.textContent.trim().replace(/"/g,'""')+'"').join(','));
+  const blob=new Blob(['\uFEFF'+rows.join('\r\n')],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Excel-Day-'+String(excelCurrent).padStart(2,'0')+'.csv';a.click();URL.revokeObjectURL(url);
+ });
  excelRender();
-
  let language='bn',startedAt=0,timer=null;
  const prompts={bn:'আমি প্রতিদিন বাংলা টাইপিং অনুশীলন করি। নিয়মিত চর্চা করলে গতি ও নির্ভুলতা বাড়ে।',en:'I practice typing every day. Regular practice helps me improve my speed and accuracy.'};
  const update=()=>{
