@@ -144,6 +144,8 @@
  const showOnly=target=>{[home,practice,list,...Object.values(views)].forEach(el=>{if(el)el.hidden=el!==target});window.scrollTo({top:0,behavior:'smooth'})};
  const hub=$('wordLearningHub'),typingHub=$('legacyTypingCourse'),wordTools=$('word-module');
  const showWordHub=()=>{hub.hidden=false;typingHub.hidden=true;wordTools.hidden=true;window.scrollTo({top:0,behavior:'smooth'})};
+ const showTypingDashboard=()=>{hub.hidden=true;wordTools.hidden=true;typingHub.hidden=false;window.scrollTo({top:0,behavior:'smooth'})};
+ $('openMyTyping').addEventListener('click',showTypingDashboard);
  $('openEnglishTyping').addEventListener('click',()=>{hub.hidden=true;wordTools.hidden=true;typingHub.hidden=false;window.scrollTo({top:0,behavior:'smooth'});$('english').click()});
  $('openBanglaTyping').addEventListener('click',()=>{hub.hidden=true;wordTools.hidden=true;typingHub.hidden=false;window.scrollTo({top:0,behavior:'smooth'});if(!$('bangla').disabled)$('bangla').click();else $('bangla').focus()});
  $('openWordTools').addEventListener('click',()=>{hub.hidden=true;typingHub.hidden=true;wordTools.hidden=false;window.scrollTo({top:0,behavior:'smooth'});});
