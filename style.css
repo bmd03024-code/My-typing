@@ -403,3 +403,42 @@ header nav{align-items:center}header nav a{color:var(--muted);text-decoration:no
 .typing-level-button:disabled{opacity:.48;cursor:not-allowed}
 .typing-level-button.level-done{border-color:var(--accent);color:var(--accent)}
 @media(max-width:600px){.typing-level-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.typing-level-button{padding:8px;font-size:12px}}
+
+
+/* Interactive 30-day Excel course */
+.excel-course{max-width:1100px;margin:18px auto;padding:clamp(12px,3vw,26px);border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--fg)}
+.excel-course-head{padding:18px 0 22px;border-bottom:1px solid var(--line)}
+.excel-course-head h2{margin:8px 0;font-size:clamp(24px,4vw,34px)}
+.excel-course-head p{color:var(--muted);line-height:1.8}
+.excel-progress{max-width:520px;margin-top:18px}
+.excel-progress strong{display:block;margin-bottom:8px;font-size:13px}
+.excel-progress .bar,.excel-course .bar{height:9px;overflow:hidden;border-radius:20px;background:var(--line)}
+.excel-progress .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.excel-course-layout{display:grid;grid-template-columns:minmax(180px,.7fr) minmax(0,1.8fr);gap:18px;margin-top:20px}
+.excel-day-panel,.excel-lesson-panel{min-width:0;padding:16px;border:1px solid var(--line);border-radius:15px;background:var(--bg)}
+.excel-day-panel h3,.excel-lesson-panel h3{margin-top:0}
+.excel-day-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.excel-day-button{display:flex;justify-content:space-between;align-items:center;gap:4px;padding:9px 7px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg);text-align:left;font-size:12px}
+.excel-day-button small{color:var(--muted);font-size:10px}
+.excel-day-button.active{border-color:var(--accent);outline:1px solid var(--accent)}
+.excel-day-button.done{background:rgba(35,170,120,.10)}
+.excel-day-button:disabled{opacity:.45}
+.excel-checkpoint-marker{grid-column:1/-1;padding:7px 3px;color:var(--accent);font-size:11px;font-weight:700;border-top:1px dashed var(--line)}
+.excel-lesson-top{display:flex;justify-content:space-between;gap:10px;color:var(--accent);font-size:12px;font-weight:800}
+.excel-lesson-panel>p,.excel-concept p,.excel-task p{line-height:1.8;color:var(--muted)}
+.excel-concept,.excel-task,.excel-checkpoint{margin:14px 0;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--panel)}
+.excel-concept strong,.excel-task strong{font-size:13px}
+.excel-sheet-wrap{margin-top:18px;overflow:hidden;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.excel-sheet-head,.excel-sheet-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px}
+.excel-sheet-head small,.excel-sheet-actions span{font-size:11px;color:var(--muted)}
+.excel-practice-sheet{width:100%;border-collapse:collapse;font-size:13px}
+.excel-practice-sheet th,.excel-practice-sheet td{border:1px solid var(--line);padding:9px;text-align:left}
+.excel-practice-sheet th{background:rgba(35,170,120,.10)}
+.excel-practice-sheet td[contenteditable="true"]{min-width:48px;background:var(--bg);outline:none}
+.excel-sheet-actions button,.excel-lesson-actions button,.excel-checkpoint button{padding:10px 14px;border:0;border-radius:9px;background:var(--accent);color:white;font-weight:700}
+.excel-lesson-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.excel-lesson-actions button:disabled,.excel-checkpoint button:disabled{opacity:.45}
+.excel-checkpoint label{display:block;margin:10px 0 6px;font-size:13px}
+.excel-checkpoint textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--fg)}
+.excel-checkpoint small{display:block;margin-top:8px;color:var(--accent)}
+@media(max-width:760px){.excel-course-layout{grid-template-columns:1fr}.excel-day-list{grid-template-columns:repeat(3,minmax(0,1fr))}.excel-day-button{flex-direction:column;align-items:flex-start}}
